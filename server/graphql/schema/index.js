@@ -4,6 +4,15 @@ const typeDefs = `
     reservedBooks: [Book!]
     reservedBookCounts: Int!
   }
+  type Status {
+    state: String!
+    mode: String!
+  }
+  type Expiry {
+    isExpired: Boolean!
+    expiryDate: Int!
+    timeFormate: String!
+  }
   type Book {
     title: String!
     author: String!
@@ -13,11 +22,14 @@ const typeDefs = `
     catagory: [String]!
     reservationHistory: [String]!
     id: ID!
+    available: Boolean!
+    expired: Expiry
   }
   type Query {
     books(catagory: String, title: String): [Book!]!
     users: [User!]!
     me: User
+    status: Status!
   }
   type Mutation {
     createUser(

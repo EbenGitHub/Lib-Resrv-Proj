@@ -36,6 +36,10 @@ const schema = new mongoose.Schema({
         ref: 'User'
      }
   ],
+  locked: {
+    type: Boolean,
+    default: false
+  },
   catagory: [
     {
       type: String

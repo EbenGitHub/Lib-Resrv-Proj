@@ -4,6 +4,7 @@ const Book = require('../../models/book')
 const User = require('../../models/user')
 const bcrypt = require('bcrypt')
 const uuid = require("uuid")
+const Config = require("../../config")
 
 require('dotenv').config()
 
@@ -24,16 +25,38 @@ const interval = (n) => {
     }
 }
 
-const isResrvExp = (date) => {
+const timeFormateConver = () => {
+  switch(maxResrDays[0]) {
+    case 'd':
+      return 'Days';
+    case 'h':
+      return 'Hours';
+    case 'm':
+      return 'Minutes';
+    default:
+      return 'Not Specified';
+  }
+}
+
+const timeDiff = (date) => {
     const intrv = interval(maxResrDays[1])
     const date1 = new Date(date);
     const date2 = new Date();
     const diffTime = Math.abs(date2 - date1);
     const diffDate = Math.ceil(diffTime / (intrv)); 
+    return diffDate
+}
+
+const isResrvExp = (date) => {
+    const diffDate = timeDiff(date)
     return diffDate >= parseInt(maxResrDays[0])
 }
 
-const reserve = (book, currUser) => {
+const reserve = async (book, currUser) => {
+  if (book.reserved) {
+    oldUser = await User.findById(book.reservedBy.id)
+    release(book, oldUser)
+  }
   const resId = uuid.v4()
   const date = new Date()
   book.reservedBy = currUser
@@ -66,9 +89,10 @@ const release = (book, currUser) => {
 const check = (book, currUser, state = 'res') => {
   const bksResByUsr = currUser.reservedBooks.map(b => b.toString())
   const bkId = book._id.toString()
+  if (book.locked) return false
   if (state === 'rel') return (bksResByUsr.includes(bkId) && book.reservedBy.toString() === currUser._id.toString())
   if (book.reserved) {
-    if (bksResByUsr.includes(bkId) && book.reservedBy.toString() === currUser._id.toString()) return false
+    if (bksResByUsr.includes(bkId) && book.reservedBy.toString() === currUser._id.toString() && !isResrvExp(book.releaseDate)) return false
     else return isResrvExp(book.reservedDate)
   } else {
     return true
@@ -94,13 +118,28 @@ const resolvers = {
         return response
       },
       users: async () => User.find({}).populate('reservedBooks'),
-      me: (root, args, {currUser}) => currUser.populate('reservedBooks')
+      me: (_root, _args, {currUser}) => currUser.populate('reservedBooks'),
+      status: () => ({state: 'ok', mode: Config.MODE})
     },
     User: {
       reservedBookCounts: (root) => root.reservedBooks.length
     },
+    Book: {
+      available: (root, _args, {currUser}) => {
+        if (root.locked || !currUser || (root.reserved && !isResrvExp(root.reservedDate))) return false
+        return true
+      },
+      expired: (root, _args, {currUser}) => {
+        if (root.locked || !currUser || !root.reserved || (root.reserved && root.reservedBy.id !== currUser.id)) return null
+        const isExpired = isResrvExp(root.reservedDate)
+        const expiryDate = timeDiff(root.reservedDate) - parseInt(maxResrDays[0])
+        const timeFormate = timeFormateConver()
+        console.log(expiryDate, root)
+        return {isExpired, expiryDate, timeFormate}
+      }
+    },
     Mutation: {
-      createUser: async (root, args) => {
+      createUser: async (_root, args) => {
         let username = args.username
         if (args.password.length < 6) throw new GraphQLError('Saving user failed', {
           extensions: {
@@ -128,7 +167,7 @@ const resolvers = {
               
         return user
       },
-      login: async (root, args) => {
+      login: async (_root, args) => {
         let user = await User.findOne({username: args.username})
           if (!user) {
             throw new GraphQLError('Unauthorized user', {
