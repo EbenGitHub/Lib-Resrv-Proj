@@ -56,6 +56,7 @@ const reserve = async (book, currUser) => {
   if (book.reserved) {
     oldUser = await User.findById(book.reservedBy.id)
     release(book, oldUser)
+    await oldUser.save()
   }
   const resId = uuid.v4()
   const date = new Date()
@@ -223,7 +224,7 @@ const resolvers = {
         }
 
         if (!check(book, currUser, 'res')) return false
-        reserve(book, currUser)
+        await reserve(book, currUser)
 
         try {
           await book.save()
