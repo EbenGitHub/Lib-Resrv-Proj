@@ -1,0 +1,48 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: node:16.19.0
+    working_directory: ~/
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-node_modules
+      - run:
+          name: install dependencies
+          command: |
+            npm install
+      - save_cache:
+          paths: ./
+          key: v1-dependencies-node_modules
+
+  test:
+    docker:
+      - image: node:16.19.0
+    working_directory: ~/
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-node_modules
+      - run:
+          name: install dependencies
+          command: |
+            npm run test
+            npm run lint
+
+  audit:
+    docker:
+      - image: node:16.19.0
+    working_directory: ~/
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-node_modules
+      - run:
+          name: install dependencies
+          command: |
+            npm audit
+

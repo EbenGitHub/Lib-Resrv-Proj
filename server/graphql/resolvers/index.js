@@ -26,7 +26,7 @@ const interval = (n) => {
 }
 
 const timeFormateConver = () => {
-  switch(maxResrDays[0]) {
+  switch(maxResrDays[1]) {
     case 'd':
       return 'Days';
     case 'h':
@@ -92,12 +92,13 @@ const check = (book, currUser, state = 'res') => {
   const bkId = book._id.toString()
   if (book.locked) return false
   if (state === 'rel') return (bksResByUsr.includes(bkId) && book.reservedBy.toString() === currUser._id.toString())
-  if (book.reserved) {
-    if (bksResByUsr.includes(bkId) && book.reservedBy.toString() === currUser._id.toString() && !isResrvExp(book.releaseDate)) return false
-    else return isResrvExp(book.reservedDate)
-  } else {
+  else if (state === 'res') {
+    if (book.reserved) return isResrvExp(book.releaseDate)
     return true
+  } else {
+    return false
   }
+  //    else return bksResByUsr.includes(bkId) && book.reservedBy.toString() === currUser._id.toString()
 } 
 
 const resolvers = {
@@ -133,7 +134,7 @@ const resolvers = {
       expired: (root, _args, {currUser}) => {
         if (root.locked || !currUser || !root.reserved || (root.reserved && root.reservedBy.id !== currUser.id)) return null
         const isExpired = isResrvExp(root.reservedDate)
-        const expiryDate = timeDiff(root.reservedDate) - parseInt(maxResrDays[0])
+        const expiryDate = parseInt(maxResrDays[0]) - timeDiff(root.reservedDate)
         const timeFormate = timeFormateConver()
         console.log(expiryDate, root)
         return {isExpired, expiryDate, timeFormate}

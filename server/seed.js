@@ -15,7 +15,7 @@ const rl = readline.createInterface({
 });
 
 const MONGODB_URI = Config.MONGODB_URI || process.env.MONGODB_URI
-const saltRounds = process.env.SALT_ROUNDS
+const saltRounds = parseInt(process.env.SALT_ROUNDS)
 
 mongoose.set('strictQuery', false)
 console.log('connecting to', MONGODB_URI)

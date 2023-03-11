@@ -1,7 +1,7 @@
 const typeDefs = `
   type User {
     username: String!
-    reservedBooks: [Book!]
+    reservedBooks: [Book]!
     reservedBookCounts: Int!
   }
   type Status {

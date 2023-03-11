@@ -1,0 +1,17 @@
+apiVersion: apps/v1 
+kind: Deployment 
+metadata: 
+  name: libapp-dep 
+  spec: 
+    replicas: 1 
+    selector: 
+      matchLabels:  
+        app: libapp 
+    template: 
+      metadata: 
+        labels: 
+          app: libapp 
+      spec: 
+        containers: 
+          - name: libapp 
+            image: eben12ysh/app:v1.0.0
