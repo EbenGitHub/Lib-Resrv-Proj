@@ -5,6 +5,8 @@ const User = require('../../models/user')
 const bcrypt = require('bcrypt')
 const uuid = require("uuid")
 const Config = require("../../config")
+const { PubSub } = require('graphql-subscriptions')
+const pubsub = new PubSub()
 
 require('dotenv').config()
 
@@ -39,12 +41,12 @@ const timeFormateConver = () => {
 }
 
 const timeDiff = (date) => {
-    const intrv = interval(maxResrDays[1])
-    const date1 = new Date(date);
-    const date2 = new Date();
-    const diffTime = Math.abs(date2 - date1);
-    const diffDate = Math.ceil(diffTime / (intrv)); 
-    return diffDate
+  const intrv = interval(maxResrDays[1])
+  const date1 = new Date(date);
+  const date2 = new Date();
+  const diffTime = Math.abs(date2 - date1);
+  const diffDate = Math.ceil(diffTime / (intrv)); 
+  return diffDate
 }
 
 const isResrvExp = (date) => {
@@ -54,9 +56,13 @@ const isResrvExp = (date) => {
 
 const reserve = async (book, currUser) => {
   if (book.reserved) {
-    oldUser = await User.findById(book.reservedBy.id)
-    release(book, oldUser)
-    await oldUser.save()
+    if (book.reservedBy._id.toString() === currUser.id) {
+      currUser.reservedBooks = currUser.reservedBooks.filter(b => b._id.toString() !== book.id)
+    } else {
+      oldUser = await User.findById(book.reservedBy._id.toString())
+      release(book, oldUser)
+      await oldUser.save()
+    }
   }
   const resId = uuid.v4()
   const date = new Date()
@@ -93,7 +99,7 @@ const check = (book, currUser, state = 'res') => {
   if (book.locked) return false
   if (state === 'rel') return (bksResByUsr.includes(bkId) && book.reservedBy.toString() === currUser._id.toString())
   else if (state === 'res') {
-    if (book.reserved) return isResrvExp(book.releaseDate)
+    if (book.reserved) return isResrvExp(book.reservedDate)
     return true
   } else {
     return false
@@ -110,7 +116,6 @@ const resolvers = {
           response = response.concat(book) 
         } 
         if (args.title) {
-            console.log(args.title)
             const book = await Book.find({ title : { $regex:  RegExp(args.title), $options: 'i' } })
             response = response.concat(book)
         }
@@ -132,11 +137,10 @@ const resolvers = {
         return true
       },
       expired: (root, _args, {currUser}) => {
-        if (root.locked || !currUser || !root.reserved || (root.reserved && root.reservedBy.id !== currUser.id)) return null
+        if (root.locked || !currUser || !root.reserved || (root.reserved && root.reservedBy._id.toString() !== currUser.id)) return null
         const isExpired = isResrvExp(root.reservedDate)
         const expiryDate = parseInt(maxResrDays[0]) - timeDiff(root.reservedDate)
         const timeFormate = timeFormateConver()
-        console.log(expiryDate, root)
         return {isExpired, expiryDate, timeFormate}
       }
     },
@@ -230,7 +234,6 @@ const resolvers = {
         try {
           await book.save()
           await currUser.save()
-          return true
         } catch(e) {
             throw new GraphQLError('Reserving a Book failed', {
               extensions: {
@@ -240,6 +243,10 @@ const resolvers = {
             }
           })
         }
+
+        pubsub.publish('BOOK_RESERVED', { bookReserved: book })
+        return true
+
       },
       releaseBook: async (_root, args, {currUser}) => {
 
@@ -272,7 +279,6 @@ const resolvers = {
         try {
           await book.save()
           await currUser.save()
-          return true
         } catch(e) {
             throw new GraphQLError('Releasing the Book failed', {
               extensions: {
@@ -282,8 +288,19 @@ const resolvers = {
             }
           })
         }
+
+        pubsub.publish('BOOK_RELEASED', { bookReleased: book })
+        return true
       }
-    }
+    },
+    Subscription: {
+      bookReserved: {
+        subscribe: () => pubsub.asyncIterator('BOOK_RESERVED')
+      },
+      bookReleased: {
+        subscribe: () => pubsub.asyncIterator('BOOK_RELEASED')
+      },
+    },
   }
   
 module.exports = resolvers
