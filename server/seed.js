@@ -17,11 +17,10 @@ const rl = readline.createInterface({
 const MONGODB_URI = Config.MONGODB_URI || process.env.MONGODB_URI
 const saltRounds = parseInt(process.env.SALT_ROUNDS)
 
-mongoose.set('strictQuery', false)
-console.log('connecting to', MONGODB_URI)
-
 const fun = async () => {
     try {
+        mongoose.set('strictQuery', false)
+        console.log('connecting to', MONGODB_URI)
         await mongoose.connect(MONGODB_URI)
         console.log("connected to MongoDB")
 
@@ -80,12 +79,10 @@ const fun = async () => {
         await book2.save()
 
         console.log('seeding was successful')
+        mongoose.connection.close()
     } catch(e) {
         console.log('error connection to MongoDB:', e.message)
     }
-
-    mongoose.connection.close()
-
 }
 
 rl.question("This will delete all your documents in your database! Are you sure you want to continue?(y/n)\n", function (string) {
