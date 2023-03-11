@@ -125,7 +125,7 @@ const resolvers = {
         return response
       },
       users: async () => User.find({}).populate('reservedBooks'),
-      me: (_root, _args, {currUser}) => currUser.populate('reservedBooks'),
+      me: (_root, _args, {currUser}) => currUser ? currUser.populate('reservedBooks') : null,
       status: () => ({state: 'ok', mode: Config.MODE})
     },
     User: {

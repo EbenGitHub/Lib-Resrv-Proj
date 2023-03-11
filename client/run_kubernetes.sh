@@ -19,4 +19,4 @@ kubectl get pods
 
 # Step 4:
 # Forward the container port to a host
-kubectl port-forward pods/appdemo 5000:80
+kubectl port-forward pods/appdemo 3000:80
