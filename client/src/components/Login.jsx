@@ -10,7 +10,7 @@ const LogIn = ({setNot, setToken}) => {
   const navigate = useNavigate()
   const [login, result] = useMutation(LOGIN, {
     onError: (error) => {
-      console.log(error.graphQLErrors[0].message)
+      setNot(error.graphQLErrors[0].message)
     }
   })
   useEffect(() => {

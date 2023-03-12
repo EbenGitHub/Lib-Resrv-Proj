@@ -38,7 +38,7 @@ const App = () => {
         <NavBar token={token} setToken={setToken} setNot={setNot}/>
         <Notify notify={notify} deleNot={deleNot}/>
         <Routes>
-          <Route path='/signup' element={<SignUp />} />
+          <Route path='/signup' element={<SignUp setNot={setNot}/>} />
           <Route path='/login' element={<LogIn setToken={setToken} setNot={setNot}/>} />
           <Route path='/' element={<Landing />} />  
           <Route path='/books' element={<Books setNot={setNot} token={token}/>} />

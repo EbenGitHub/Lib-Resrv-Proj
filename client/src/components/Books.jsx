@@ -94,6 +94,19 @@ const Books = ({token, setNot}) => {
                 }),
               }
             })
+        //     cache.updateQuery({ query: ME}, ({ me }) => {
+        //         console.log('trying to update')
+        //         return {
+        //         me: {...me, reservedBooks: me.reservedBooks.map(b => {
+        //             if (b.id === response.data.reserveBook.id) {
+        //                 console.log('found here')
+        //                 return response.data.reserveBook
+        //             } else {
+        //                 return b
+        //             }
+        //         }), reservedBookCounts: me.reservedBookCounts + 1},
+        //         }
+        //     })
           },
     })
     
@@ -113,6 +126,17 @@ const Books = ({token, setNot}) => {
               }),
             }
           })
+        // cache.updateQuery({ query: ME}, ({ me }) => {
+        //     return {
+        //     me: {...me, reservedBooks: me.reservedBooks.map(b => {
+        //         if (b.id === response.data.releaseBook.id) {
+        //             return response.data.releaseBook
+        //         } else {
+        //             return b
+        //         }
+        //     }), reservedBookCounts: me.reservedBookCounts - 1},
+        //     }
+        // })
         },
       })
 
@@ -135,6 +159,7 @@ const Books = ({token, setNot}) => {
     const reserveBook = (id) => {
         console.log(id)
         if (!token) {
+            setNot({title: 'You need to sign in first to reserve a book. Already have an account? ', link: {title: 'click here to sign in', anchor: '/login'}})
             navigate('/signup')
             return
         }
@@ -150,6 +175,7 @@ const Books = ({token, setNot}) => {
     const releaseBook = (id) => {
         console.log(id)
         if (!token) {
+            setNot({title: 'You need to sign in first to reserve a book. Already have an account? ', link: {title: 'click here to sign in', anchor: '/login'}})
             navigate('/signup')
             return
         }

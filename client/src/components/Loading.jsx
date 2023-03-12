@@ -2,7 +2,7 @@ const Loading = () => {
     return ( 
         <div className="bg-blue-100 min-w-screen py-40 min-h-screen overflow-x-hidden flex flex-col items-center">
             {
-                [1,2,3,4,5].map(() => <div className="bg-white m-2 w-4/5 p-5 rounded drop-shadow">
+                [1,2,3,4,5].map((ele) => <div className="bg-white m-2 w-4/5 p-5 rounded drop-shadow" key={ele}>
                     <div className='flex justify-between'>
                 <div className='flex w-2/6 bg-gray-50 rounded-full'>
                     <div className='w-20 bg-gray-300 animate-pulse h-20 rounded '><p className='text-black text-center'></p> </div>

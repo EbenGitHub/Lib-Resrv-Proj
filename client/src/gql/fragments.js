@@ -7,7 +7,6 @@ fragment Books on Book {
       reserved
       reservedBy {
         id
-        username
       }
       reservationHistory
       id

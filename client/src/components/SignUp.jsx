@@ -1,8 +1,26 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Link } from 'react-router-dom';
+import { useMutation } from '@apollo/client';
+import { CREATE_USER } from '../gql/mutations';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
-const SignUp = () => {
+
+const SignUp = ({setNot}) => {
+  const navigate = useNavigate()
+  const [singup, result] = useMutation(CREATE_USER, {
+    onError: (error) => {
+      setNot(error.graphQLErrors[0].message)
+    }
+  })
+  useEffect(() => {
+    if ( result.data ) {
+      setNot({title: 'signup was successfully', status: 'success'})
+      setNot({title: 'You need to login with your new account', status: 'warning'})
+      navigate('/login')
+    }
+  }, [result.data]) // eslint-disable-line
     const professions = ['Student', 'Employee', 'Employer', 'Others'];
     const formik = useFormik({
         initialValues: {
@@ -13,6 +31,13 @@ const SignUp = () => {
         },
         onSubmit: function (values) {
             console.log(values)
+            singup({
+              variables: {
+                username: values.username,
+                password: values.password,
+                profession: values.profession
+              }
+            })
         },
         validationSchema: Yup.object({
             username: Yup

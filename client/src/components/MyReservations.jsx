@@ -8,6 +8,7 @@ import Loading from './Loading';
 
 const MyReservations = ({token, setNot}) => {
     const navigate = useNavigate()
+
     const data = useQuery(ME)
 
     const [reserve, resResult] = useMutation(RESERVE_BOOK, {
@@ -26,6 +27,17 @@ const MyReservations = ({token, setNot}) => {
         }),
         }
     })
+    //     cache.updateQuery({ query: ME}, ({ me }) => {
+    //     return {
+    //     me: {...me, reservedBooks: me.reservedBooks.map(b => {
+    //         if (b.id === response.data.reserveBook.id) {
+    //             return response.data.reserveBook
+    //         } else {
+    //             return b
+    //         }
+    //     }), reservedBookCounts: me.reservedBookCounts + 1},
+    //     }
+    // })
     },
     })
     
@@ -45,6 +57,17 @@ const MyReservations = ({token, setNot}) => {
               }),
             }
           })
+        //   cache.updateQuery({ query: ME}, ({ me }) => {
+        //     return {
+        //     me: {...me, reservedBooks: me.reservedBooks.map(b => {
+        //         if (b.id === response.data.releaseBook.id) {
+        //             return response.data.releaseBook
+        //         } else {
+        //             return b
+        //         }
+        //     }), reservedBookCounts: me.reservedBookCounts - 1},
+        //     }
+        // })
         },
       })
 
@@ -111,6 +134,10 @@ const MyReservations = ({token, setNot}) => {
     <div className='text-sm text-white mt-5 bg-rose-500 p-1 rounded drop-shadow-xl cursor-pointer'>Release Book</div>
 </div>
 
+    if (!token) {
+        setNot({title: 'You need to sign in to access this page. New to this page? ', link: {title: 'click here to sign up', anchor: '/signup'}})
+        return navigate('/login')
+    }
     if (data.loading) return <Loading />
 
     const books = data?.data?.me?.username && data.data.me.reservedBooks ? data.data.me.reservedBooks : []
@@ -148,11 +175,11 @@ const MyReservations = ({token, setNot}) => {
                     {
                         !books.length ? <p className='bg-gray-50 rounded-full p-4 my-3 drop-shadow'>You have no reservation history.</p> : 
                         books.map(b => {
-                            return <div className='bg-white rounded- drop-shadow m-5 p-5'>
+                            return <div className='bg-white rounded- drop-shadow m-5 p-5' key={b.id}>
                             <h4 className='text-lg font-[700] pb-5'>{b.title}</h4>
                             {
                                 !b.reservationHistory.length ? <li className='bg-gray-50 rounded-full p-4 my-3 drop-shadow'>You have no reservation history for this book.</li> :
-                                b.reservationHistory.map(h => <li className='bg-gray-50 rounded-full p-4 my-3 drop-shadow'>{h}</li>) 
+                                b.reservationHistory.map(h => <li key={h} className='bg-gray-50 rounded-full p-4 my-3 drop-shadow'>{h}</li>) 
                             }
                             </div>
                         })
