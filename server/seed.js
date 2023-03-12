@@ -14,7 +14,7 @@ const rl = readline.createInterface({
     output: process.stdout,
 });
 
-const MONGODB_URI = Config.MONGODB_URI || process.env.MONGODB_URI
+const MONGODB_URI = Config.MONGODB_URI
 const saltRounds = parseInt(process.env.SALT_ROUNDS)
 
 const fun = async () => {

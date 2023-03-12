@@ -9,6 +9,9 @@ const schema = new mongoose.Schema({
     unique: true,
     minlength: 4
   },
+  profession: {
+    type: String,
+  },
   hashedPassword: {
     type: String,
     required: true

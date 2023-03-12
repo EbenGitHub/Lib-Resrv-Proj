@@ -146,7 +146,6 @@ const resolvers = {
     },
     Mutation: {
       createUser: async (_root, args) => {
-        let username = args.username
         if (args.password.length < 6) throw new GraphQLError('Saving user failed', {
           extensions: {
             code: 'BAD_USER_INPUT',
@@ -155,8 +154,10 @@ const resolvers = {
             error: 'password length is less than 6'
           }
         })
+        let username = args.username
+        let profession = args.profession
         let hashedPassword = await bcrypt.hash(args.password, saltRounds)
-        let user = new User({username, hashedPassword})
+        let user = new User({username, hashedPassword, profession})
               
         try {
           await user.save()

@@ -1,13 +1,16 @@
 require('dotenv').config()
 
 const MODE = process.env.NODE_ENV
+const MONGODB = process.env.DB_STATUS === 'online' ? process.env.MONGODB_ATL : process.env.MONGODB_LOC
 
-const MONGODB_URI = (MODE === 'production') ? 
-        process.env.MONGODB_URI : 
-    (MODE === 'development') ? 
-        process.env.MONGODB_URI_DEV :
-    (MODE === 'test') ? 
-        process.env.MONGODB_URI_TES : null
+const DB = (MODE === 'production') ? 
+            process.env.DB_PRO : 
+        (MODE === 'development') ? 
+            process.env.DB_DEV :
+        (MODE === 'test') ? 
+            process.env.DB_TES : null
+
+const MONGODB_URI = MONGODB.replace('(REPLACE_ME)', DB)
 
 const PORT = parseInt(process.env.PORT) || 4000
 

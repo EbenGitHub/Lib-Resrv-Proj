@@ -41,6 +41,7 @@ const typeDefs = `
   type Mutation {
     createUser(
       username: String!
+      profession: String!
       password: String!
     ): User
     login(
