@@ -50,10 +50,10 @@ const typeDefs = `
     ): Token
     reserveBook(
       id: ID!
-    ): Boolean!
+    ): Book
     releaseBook(
       id: ID!
-    ): Boolean!
+    ): Book
   }
 
   type Token {

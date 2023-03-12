@@ -1,14 +1,44 @@
 import { gql } from "@apollo/client";
 
 export const RESERVE_BOOK = gql`
-mutation($reserveBookId: ID!) {
-    reserveBook(id: $reserveBookId)
+mutation($id: ID!) {
+    reserveBook(id: $id) {
+      id
+    title
+    reservedDate
+    reserved
+    reservationHistory
+    available
+    expired {
+      expiryDate
+      isExpired
+      timeFormate
+    }
+    reservedBy {
+      id
+    }
+    }
   }
 `
 
 export const RELEASE_BOOK = gql`
-mutation($reserveBookId: ID!) {
-    releaseBook(id: $reserveBookId)
+mutation($id: ID!) {
+    releaseBook(id: $id) {
+      id
+    title
+    reservedDate
+    reserved
+    reservationHistory
+    available
+    expired {
+      expiryDate
+      isExpired
+      timeFormate
+    }
+    reservedBy {
+      id
+    }
+    }
   }
 `
 
@@ -21,8 +51,8 @@ mutation($username: String!, $password: String!) {
 `
 
 export const LOGIN = gql`
-mutation($loginUsername3: String!, $loginPassword2: String!) {
-    login(username: $loginUsername3, password: $loginPassword2) {
+mutation($username: String!, $password: String!) {
+    login(username: $username, password: $password) {
       value
     }
   }

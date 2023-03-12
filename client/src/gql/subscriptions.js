@@ -4,9 +4,13 @@ export const BOOK_RESERVED = gql`
 subscription {
     bookReserved {
       id
+      reservedDate
+      reserved
+      available
       title
       reservedBy {
         username
+        id
       }
     }
   }

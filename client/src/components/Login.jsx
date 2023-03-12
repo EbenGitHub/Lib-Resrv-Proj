@@ -1,8 +1,28 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Link } from 'react-router-dom';
+import { useMutation } from '@apollo/client';
+import { LOGIN } from '../gql/mutations';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const LogIn = () => {
+const LogIn = ({setNot, setToken}) => {
+  const navigate = useNavigate()
+  const [login, result] = useMutation(LOGIN, {
+    onError: (error) => {
+      console.log(error.graphQLErrors[0].message)
+    }
+  })
+  useEffect(() => {
+    if ( result.data ) {
+      const token = result.data.login.value
+      setToken(token)
+      console.log('token', token)
+      localStorage.setItem('library-user-token', token)
+      setNot({title: 'logged in successfully', status: 'success'})
+      navigate('/books')
+    }
+  }, [result.data]) // eslint-disable-line
     const formik = useFormik({
         initialValues: {
           username: '',
@@ -10,6 +30,12 @@ const LogIn = () => {
         },
         onSubmit: function (values) {
             console.log(values)
+            login({
+              variables: {
+                username: values.username,
+                password: values.password
+              }
+            })
         },
         validationSchema: Yup.object({
             username: Yup

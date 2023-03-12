@@ -243,7 +243,7 @@ const resolvers = {
             })
         }
 
-        if (!check(book, currUser, 'res')) return false
+        if (!check(book, currUser, 'res')) return null
         await reserve(book, currUser)
 
         try {
@@ -260,7 +260,7 @@ const resolvers = {
         }
 
         pubsub.publish('BOOK_RESERVED', { bookReserved: book })
-        return true
+        return book.populate('reservedBy')
 
       },
       releaseBook: async (_root, args, {currUser}) => {
@@ -288,7 +288,7 @@ const resolvers = {
             })
         }
 
-        if (!check(book, currUser, 'rel')) return false
+        if (!check(book, currUser, 'rel')) return null
         release(book, currUser)
 
         try {
@@ -305,7 +305,7 @@ const resolvers = {
         }
 
         pubsub.publish('BOOK_RELEASED', { bookReleased: book })
-        return true
+        return book.populate('reservedBy')
       }
     },
     Subscription: {

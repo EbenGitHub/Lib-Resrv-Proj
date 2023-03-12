@@ -1,9 +1,9 @@
 import { gql } from "@apollo/client";
-import { BOOKS, USERS } from "./fragments";
+import { BOOKS, ME_FRAG } from "./fragments";
 
 export const ALL_BOOKS = gql`
-query books($title: String){
-    books(title: $title)  {
+query {
+    books {
         ...Books
     }
 }
@@ -14,10 +14,10 @@ ${BOOKS}
 export const ME = gql`
 query {
     me {
-      ...Users
+      ...Me
     }
   }
 
-${USERS}
+${ME_FRAG}
 `
 

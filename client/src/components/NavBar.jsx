@@ -1,7 +1,7 @@
 import logo from '../assets/lib.webp'
 import { Link, useNavigate } from 'react-router-dom';
 
-const NavBar = ({token}) => {
+const NavBar = ({token, setToken, setNot}) => {
   const navigate = useNavigate()
     return ( 
         <nav class="z-20 p-3 border-gray-200 rounded bg-gray-50 dark:bg-gray-800 dark:border-gray-700 fixed w-screen">
@@ -36,8 +36,10 @@ const NavBar = ({token}) => {
                           </li>
                           <li class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">
                             <Link onClick={() => {
-                              console.log('logged out')
+                              localStorage.removeItem('library-user-token')
+                              setToken(null)
                               navigate('/')
+                              setNot({title: 'signed out successfully', status: 'success'})
                             }}>Sign out</Link>
                           </li>
                         </>

@@ -1,16 +1,95 @@
-import {ME} from '../gql/queries'
-import { useQuery } from '@apollo/client';
+import {ALL_BOOKS, ME} from '../gql/queries'
+import {RESERVE_BOOK, RELEASE_BOOK} from '../gql/mutations'
+import { useQuery, useMutation } from '@apollo/client';
 import icon from '../assets/book-solid.svg'
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import Loading from './Loading';
 
-const MyReservations = () => {
-    const data = useQuery(ME, {
-        variables: {
-            title: ''
+const MyReservations = ({token, setNot}) => {
+    const navigate = useNavigate()
+    const data = useQuery(ME)
+
+    const [reserve, resResult] = useMutation(RESERVE_BOOK, {
+        onError: (error) => {
+          setNot({title: error.graphQLErrors[0].message})
+        },
+        update: (cache, response) => {
+        cache.updateQuery({ query: ALL_BOOKS}, ({ books }) => {
+        return {
+        books: books.map(b => {
+            if (b.id === response.data.reserveBook.id) {
+                return response.data.reserveBook
+            } else {
+                return b
+            }
+        }),
         }
     })
+    },
+    })
+    
+    const [release, relResult] = useMutation(RELEASE_BOOK, {
+        onError: (error) => {
+            setNot({title: error.graphQLErrors[0].message})
+        },
+        update: (cache, response) => {
+            cache.updateQuery({ query: ALL_BOOKS}, ({ books }) => {
+            return {
+              books: books.map(b => {
+                  if (b.id === response.data.releaseBook.id) {
+                      return response.data.releaseBook
+                  } else {
+                      return b
+                  }
+              }),
+            }
+          })
+        },
+      })
+
+    useEffect(() => {
+        if ( relResult.data ) {
+            relResult.data && relResult.data.releaseBook ? 
+                setNot({title: 'releasing the book was successful', status: 'success'}) : 
+                setNot({title: 'something went wrong', status: 'danger'})
+        }
+      }, [relResult.data]) // eslint-disable-line
+
+    useEffect(() => {
+        if ( resResult.data ) {
+            resResult.data && resResult.data.reserveBook ? 
+                setNot({title: 'reservation was successful', status: 'success'}) : 
+                setNot({title: 'something went wrong', status: 'danger'})
+        }
+      }, [resResult.data]) // eslint-disable-line
+
+    const reserveBook = (id) => {
+        if (!token) {
+            navigate('/signup')
+            return
+        }
+        reserve({
+            variables: {
+                id
+            }
+        })
+    }
+
+    const releaseBook = (id) => {
+        if (!token) {
+            navigate('/signup')
+            return
+        }
+        release({
+            variables: {
+                id
+            }
+        })
+    }
 
     const reservedTag = <div className='flex items-center'>
-    <span className='h-3 w-3 bg-yellow-700 rounded-full inline-block border-1 border-yellow-300 border-dotted shadow-xl pt-2  drop-shadow-lg'></span>
+    <span className='h-3 w-3 bg-yellow-600 rounded-full inline-block border-1 border-yellow-300 border-dotted shadow-xl pt-2  drop-shadow-lg'></span>
     <p className='ml-5 text-sm bg-yellow-100 rounded p-1 text-yellow-700 font-[500]'>Reserved</p>
 </div>
 
@@ -24,20 +103,20 @@ const MyReservations = () => {
     <p className='ml-5 text-sm bg-red-100 rounded p-1 text-red-700 font-[500]'>Not available</p>
 </div>
 
-    const reserveButton = <div className='flex items-center relative'>
+    const reserveButton = (id) => <div className='flex items-center relative' onClick={() => reserveBook(id)}>
     <div className='text-sm text-white animate-bounce mt-5 bg-green-500 p-1 rounded drop-shadow-xl cursor-pointer font-[600]'>Reserve Now</div>
 </div>
 
-    const releaseButton = <div className='flex items-center relative'>
+    const releaseButton = (id) => <div className='flex items-center relative' onClick={() => releaseBook(id)}>
     <div className='text-sm text-white mt-5 bg-rose-500 p-1 rounded drop-shadow-xl cursor-pointer'>Release Book</div>
 </div>
 
-    if (data.loading) return <p>Loading</p>
+    if (data.loading) return <Loading />
 
     const books = data?.data?.me?.username && data.data.me.reservedBooks ? data.data.me.reservedBooks : []
     return ( 
         <div className="bg-blue-100 min-w-screen py-40 min-h-screen overflow-x-hidden flex flex-col items-center">
-            <h2 className='text-xl font-[700] mb-9 text-cyan-900 '>Hi <span className='bg-gray-50 text-gray-700 p-2 rounded-full text-3xl mx-2'>{data.data.me.username}</span>. These are your reservations</h2>
+            <h2 className='text-xl font-[700] mb-9 text-white bg-cyan-500 p-3 rounded '>Hi {data.data.me.username}. These are your reservations</h2>
             {
                 books.map(b => <div key={b.id} className="bg-white m-2 w-4/5 p-5 rounded drop-shadow">
                    <div className='flex justify-between'>
@@ -57,7 +136,7 @@ const MyReservations = () => {
                             b.available ? availableTag : (b.expired ? reservedTag : unavailableTag)
                         }
                         {
-                            b.available ? reserveButton : (b.expired ? releaseButton : null)
+                            b.available ? reserveButton(b.id) : (b.expired ? releaseButton(b.id) : null)
                         }
                        </div>
                    </div>
@@ -67,6 +146,7 @@ const MyReservations = () => {
                 <h3 className=' p-5 rounded-full text-2xl text-gray-600 font-[800]'>Your Reservation History</h3>
                 <ul>
                     {
+                        !books.length ? <p className='bg-gray-50 rounded-full p-4 my-3 drop-shadow'>You have no reservation history.</p> : 
                         books.map(b => {
                             return <div className='bg-white rounded- drop-shadow m-5 p-5'>
                             <h4 className='text-lg font-[700] pb-5'>{b.title}</h4>
