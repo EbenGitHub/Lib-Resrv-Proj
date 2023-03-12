@@ -1,4 +1,4 @@
-import logo from '../assets/lib.png'
+import logo from '../assets/lib.webp'
 import { useNavigate } from 'react-router-dom/dist';
 
 const NavBar = () => {

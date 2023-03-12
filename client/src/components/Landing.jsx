@@ -1,6 +1,6 @@
 import img1 from '../assets/library.webp'
-import img2 from '../assets/book.jpg'
-import img3 from '../assets/phone.jpg'
+import img2 from '../assets/book.webp'
+import img3 from '../assets/phone.webp'
 
 import { useNavigate } from 'react-router-dom/dist'
 
