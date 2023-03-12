@@ -64,7 +64,7 @@ const SignUp = ({setNot}) => {
           <form onSubmit={formik.handleSubmit} className="max-w-lg mx-auto bg-white rounded shadow-lg mt-7 p-3">
           <h1 className='text-3xl mb-3 text-center'>Register</h1>
             <div className='mb-4'>
-              <label for="username">Choose username</label>
+              <label htmlFor="username">Choose username</label>
               <input type="text" name="username" id="username" 
                 className={`block w-full rounded border-2 py-1 px-2 ${formik.touched.username && formik.errors.username ? 'border-red-500' : 'border-gray-300'}`}
                 onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.username} />
@@ -74,7 +74,7 @@ const SignUp = ({setNot}) => {
             </div>
 
             <div className='mb-4'>
-              <label for="profession">Profession</label>
+              <label htmlFor="profession">Profession</label>
               <select name="profession" id="profession"
                 className={`block w-full rounded border-2 py-1 px-2 ${formik.touched.profession && formik.errors.profession ? 'border-red-500' : 'border-gray-300'}`}
                 onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.profession} >
@@ -89,7 +89,7 @@ const SignUp = ({setNot}) => {
             </div>
 
             <div className='mb-4'>
-              <label for="password">Password</label>
+              <label htmlFor="password">Password</label>
               <input type="password" name="password" id="password"
                 className={`block w-full rounded border-2 py-1 px-2 ${formik.touched.password && formik.errors.password ? 'border-red-500' : 'border-gray-300'}`}
                 onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.password} />
@@ -99,7 +99,7 @@ const SignUp = ({setNot}) => {
             </div>
 
             <div className='mb-4'>
-              <label for="passwordcnf">Confirm Password</label>
+              <label htmlFor="passwordcnf">Confirm Password</label>
               <input type="password" name="passwordcnf" id="passwordcnf"
                 className={`block w-full rounded border-2 py-1 px-2 ${formik.touched.passwordcnf && formik.errors.passwordcnf ? 'border-red-500' : 'border-gray-300'}`}
                 onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.passwordcnf} />

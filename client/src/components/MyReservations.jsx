@@ -134,11 +134,12 @@ const MyReservations = ({token, setNot}) => {
     <div className='text-sm text-white mt-5 bg-rose-500 p-1 rounded drop-shadow-xl cursor-pointer'>Release Book</div>
 </div>
 
-    if (!token) {
-        setNot({title: 'You need to sign in to access this page. New to this page? ', link: {title: 'click here to sign up', anchor: '/signup'}})
-        return navigate('/login')
-    }
-    if (data.loading) return <Loading />
+if (!token && data) {
+    console.log(token)
+    setNot({title: 'You need to sign in to access this page. New to this page? why', link: {title: 'click here to sign up', anchor: '/signup'}})
+    return navigate('/login')
+}
+if (data.loading) return <Loading />
 
     const books = data?.data?.me?.username && data.data.me.reservedBooks ? data.data.me.reservedBooks : []
     return ( 

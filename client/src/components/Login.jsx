@@ -53,7 +53,7 @@ const LogIn = ({setNot, setToken}) => {
           <form onSubmit={formik.handleSubmit} className="max-w-lg mx-auto bg-white rounded shadow-lg mt-7 p-3">
           <h1 className='text-3xl mb-3 text-center'>Sign in</h1>
             <div className='mb-4'>
-              <label for="username">Username</label>
+              <label htmlFor="username">Username</label>
               <input type="text" name="username" id="username" 
                 className={`block w-full rounded border-2 py-1 px-2 ${formik.touched.username && formik.errors.username ? 'border-red-500' : 'border-gray-300'}`}
                 onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.username} />
@@ -63,7 +63,7 @@ const LogIn = ({setNot, setToken}) => {
             </div>
 
             <div className='mb-4'>
-              <label for="password">Password</label>
+              <label htmlFor="password">Password</label>
               <input type="password" name="password" id="password"
                 className={`block w-full rounded border-2 py-1 px-2 ${formik.touched.password && formik.errors.password ? 'border-red-500' : 'border-gray-300'}`}
                 onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.password} />

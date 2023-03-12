@@ -27,7 +27,7 @@ const App = () => {
     const id = uuid.v4()
     setNotify(notify.concat({id, title: msg.title, status: msg.status, link: msg.link}))
   }
-  
+
   const deleNot = (id) => {
     setNotify(notify.filter(n => n.id !== id))
   }
