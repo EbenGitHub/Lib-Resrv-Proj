@@ -1,34 +1,32 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   Routes, Route, Link, useNavigate, useMatch
 } from 'react-router-dom'
-import { useQuery } from '@apollo/client'
-import { ALL_BOOKS } from './gql/queries'
 import NavBar from './components/NavBar'
 import LogIn from './components/LogIn'
 import SignUp from './components/SignUp'
 import Landing from './components/Landing'
+import Books from './components/Books'
+import MyReservations from './components/MyReservations'
 
 
 const App = () => {
- const data = useQuery(ALL_BOOKS, {
-    variables: {
-        title: 'python'
-    }
- })
- console.log(data.data)
+  const [token, setToken] = useState(null)
+  useEffect(() => {
+    const tk = localStorage.getItem('library-user-token')
+    if (tk) setToken(tk)
+  }, [])
 
 
   return (
       <div>
-        <NavBar />
+        <NavBar token={token} />
         <Routes>
-            <Route path='/signup' element={<SignUp />} />
-            <Route path='/login' element={<LogIn />} />
-            <Route path='/' element={<Landing />} />
-            
-            
-            
+          <Route path='/signup' element={<SignUp />} />
+          <Route path='/login' element={<LogIn />} />
+          <Route path='/' element={<Landing />} />  
+          <Route path='/books' element={<Books />} />
+          <Route path='/reservations' element={<MyReservations />} />
         </Routes>
       </div>
   )

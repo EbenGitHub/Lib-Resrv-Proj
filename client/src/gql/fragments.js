@@ -5,6 +5,7 @@ fragment Books on Book {
     title
       reservedDate
       reserved
+      reservationHistory
       id
       available
       expired {

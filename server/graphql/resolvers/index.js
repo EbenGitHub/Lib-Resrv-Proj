@@ -104,7 +104,6 @@ const check = (book, currUser, state = 'res') => {
   } else {
     return false
   }
-  //    else return bksResByUsr.includes(bkId) && book.reservedBy.toString() === currUser._id.toString()
 } 
 
 const resolvers = {
@@ -132,8 +131,8 @@ const resolvers = {
       reservedBookCounts: (root) => root.reservedBooks.length
     },
     Book: {
-      available: (root, _args, {currUser}) => {
-        if (root.locked || !currUser || (root.reserved && !isResrvExp(root.reservedDate))) return false
+      available: (root, _args) => {
+        if (root.locked || (root.reserved && !isResrvExp(root.reservedDate))) return false
         return true
       },
       expired: (root, _args, {currUser}) => {
@@ -142,6 +141,21 @@ const resolvers = {
         const expiryDate = parseInt(maxResrDays[0]) - timeDiff(root.reservedDate)
         const timeFormate = timeFormateConver()
         return {isExpired, expiryDate, timeFormate}
+      },
+      reservationHistory: async(root, _args, {currUser}) => {
+        if (!currUser) return []
+        const history = root.reservationHistory.filter(h => {
+          let his = JSON.parse(h)
+          if (his.reserverUser === currUser.id) {
+            return true
+          } else {
+            return false
+          }
+        }).map(h => {
+          const his = JSON.parse(h)
+          return `You reserved this book at ${his.reservationDate} ${his.releaseDate ? `and released the book at ${his.releaseDate}` : `and the book taking date has expired`}`
+        })
+        return history
       }
     },
     Mutation: {

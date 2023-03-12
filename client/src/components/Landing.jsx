@@ -2,10 +2,9 @@ import img1 from '../assets/library.webp'
 import img2 from '../assets/book.webp'
 import img3 from '../assets/phone.webp'
 
-import { useNavigate } from 'react-router-dom/dist'
+import { Link } from 'react-router-dom'
 
 const Landing = () => {
-    const navigate = useNavigate()
     return ( 
         <div className="bg-blue-50 min-w-screen py-40 min-h-screen overflow-x-hidden p-10">
             <div className='h-screen mb-20'>
@@ -22,7 +21,9 @@ const Landing = () => {
                 <img src={img3} className="h-2/3 rounded shadow" />
             </div>
             <div className='flex justify-center pt-20'>
-                <button className='text-4xl bg-blue-600 rounded font-[700] text-white p-4 mb-20' onClick={() => navigate('/signup')}>Sign Up today. </button>
+                <button className='text-4xl bg-blue-600 rounded font-[700] text-white p-4 mb-20'>
+                    <Link to='/signup'>Sign Up today. </Link>
+                </button>
             </div>
         </div>
      );

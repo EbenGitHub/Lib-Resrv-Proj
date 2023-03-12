@@ -1,9 +1,8 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useNavigate } from 'react-router-dom/dist';
+import { Link } from 'react-router-dom';
 
 const SignUp = () => {
-    const navigate = useNavigate()
     const professions = ['Student', 'Employee', 'Employer', 'Others'];
     const formik = useFormik({
         initialValues: {
@@ -88,7 +87,9 @@ const SignUp = () => {
               <button className='bg-blue-500 rounded p-3 text-white' type='submit'>Sign Up</button>
             </div>
           </form>
-          <p className='text-center pt-5'>already have an account? <span className='text-white font-[700] cursor-pointer' onClick={() => navigate('/login')}>Log in</span></p>
+          <p className='text-center pt-5'>already have an account? <span className='text-white font-[700]'>
+            <Link to='/login'>Log in</Link>
+            </span></p>
         </div>
       );
 }
