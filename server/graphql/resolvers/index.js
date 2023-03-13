@@ -123,6 +123,22 @@ const resolvers = {
         }
         return response
       },
+      book: async (_root, args) => {
+        let book = null
+        try {
+          book = await Book.findById(args.id)
+        } catch(e) {
+          throw new GraphQLError('Finding book failed', {
+            extensions: {
+              code: 'BAD_USER_INPUT',
+              invalidArgs: args.id,
+              reason: 'invalid id provided',
+              error: e
+            }
+          })
+        }
+        return book
+      },
       users: async () => User.find({}).populate('reservedBooks'),
       me: (_root, _args, {currUser}) => currUser ? currUser.populate('reservedBooks') : null,
       status: () => ({state: 'ok', mode: Config.MODE})
@@ -216,7 +232,7 @@ const resolvers = {
           }
               
           let encToken = jwt.sign(userToken, process.env.JWT_SECRET, {expiresIn: process.env.JWT_EXP_TIME})
-          return { value: encToken }
+          return { value: encToken, id: user._id.toString() }
       },
       reserveBook: async (_root, args, {currUser}) => {
 
@@ -259,8 +275,9 @@ const resolvers = {
           })
         }
 
-        pubsub.publish('BOOK_RESERVED', { bookReserved: book })
-        return book.populate('reservedBy')
+        const bookToReturn = await book.populate('reservedBy')
+        pubsub.publish('BOOK_RESERVED', { bookReserved: bookToReturn })
+        return bookToReturn
 
       },
       releaseBook: async (_root, args, {currUser}) => {
@@ -304,8 +321,9 @@ const resolvers = {
           })
         }
 
-        pubsub.publish('BOOK_RELEASED', { bookReleased: book })
-        return book.populate('reservedBy')
+        const bookToReturn = await book.populate('reservedBy')
+        pubsub.publish('BOOK_RELEASED', { bookReleased: bookToReturn })
+        return bookToReturn
       }
     },
     Subscription: {

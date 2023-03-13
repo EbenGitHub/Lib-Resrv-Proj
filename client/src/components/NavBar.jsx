@@ -1,7 +1,9 @@
 import logo from '../assets/lib.webp'
 import { Link } from 'react-router-dom';
+import { useApolloClient } from '@apollo/client';
 
 const NavBar = ({token, setToken, setNot}) => {
+  const client = useApolloClient()
     return ( 
         <nav className="z-20 p-3 border-gray-200 rounded bg-gray-50 dark:bg-gray-800 dark:border-gray-700 fixed w-screen">
         <div className="container flex flex-wrap items-center justify-between mx-auto">
@@ -37,6 +39,7 @@ const NavBar = ({token, setToken, setNot}) => {
                             <Link to='/books' onClick={() => {
                               localStorage.removeItem('library-user-token')
                               setToken(null)
+                              client.resetStore()
                               setNot({title: 'you are not logged in. Please log in to enjoy full features', status: 'warning', link: {title: 'click here to log in', anchor: '/login'}})
                             }}>Sign out</Link>
                           </li>

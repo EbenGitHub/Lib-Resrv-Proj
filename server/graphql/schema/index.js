@@ -33,6 +33,7 @@ const typeDefs = `
 
   type Query {
     books(catagory: String, title: String): [Book!]!
+    book(id: ID!): Book
     users: [User!]!
     me: User
     status: Status!
@@ -58,6 +59,7 @@ const typeDefs = `
 
   type Token {
     value: String!
+    id: ID!
   }
 
   type Subscription {
