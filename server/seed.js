@@ -24,8 +24,8 @@ const fun = async () => {
         await mongoose.connect(MONGODB_URI)
         console.log("connected to MongoDB")
 
-        User.deleteMany()
-        Book.deleteMany()
+        await User.deleteMany()
+        await Book.deleteMany()
 
         const hashedPassword = await bcrypt.hash('password', saltRounds)
 
@@ -52,9 +52,39 @@ const fun = async () => {
             reserved: false,
             author: "Nail Will",
         })
+        const book3 = new Book({
+            title: "why you need to be a programmer",
+            reserved: false,
+            author: "Nail Will",
+        })
+        const book4 = new Book({
+            title: "ChatGPT and its impact",
+            reserved: false,
+            author: "Nail Will",
+        })
+        const book5 = new Book({
+            title: "Learn full React course",
+            reserved: false,
+            author: "Nail Will",
+        })
+        const book6 = new Book({
+            title: "Top 10 leading technologies",
+            reserved: false,
+            author: "Nail Will",
+        })
+        const book7 = new Book({
+            title: "You need to know this",
+            reserved: false,
+            author: "Nail Will",
+        })
 
         await book1.save()
         await book2.save()
+        await book3.save()
+        await book4.save()
+        await book5.save()
+        await book6.save()
+        await book7.save()
 
         // reserve one book
         const date = new Date()
