@@ -11,7 +11,8 @@ const SignUp = ({setNot}) => {
   const navigate = useNavigate()
   const [singup, result] = useMutation(CREATE_USER, {
     onError: (error) => {
-      setNot(error.graphQLErrors[0].message)
+      console.log(error.graphQLErrors[0].message)
+      setNot({title: error.graphQLErrors[0].extensions.reason.toUpperCase(), link: {title: 'Already have an account ? Login', anchor: './login'}})
     }
   })
   useEffect(() => {
