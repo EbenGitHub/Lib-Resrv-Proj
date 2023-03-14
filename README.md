@@ -22,10 +22,10 @@ Hi! Welcome to the ultimate ላyብRaሪ, library for local library users and bo
 ### Targets
 Simply this app is for Students, Teachers, Professors or any one who loves and reads books. Have you ever went to a library seeking to read or borrow a  book, but went back home disappointed the book you are looking is not available. Or Have you ever spend your day working or learning and did not get the chance to go to a library and reserve a book for your study. Say good bye to those problems. This app will help you solve problems related with book reserving issues.
 ### UIUX Designs
-> I used some imaginary characters (Persona) to consider people with different background, gender, occupations, etc...
-> And I tried to set the problem and user experience with User Journey Map, User Story and Problem Statement.
-> Before starting to build anything, I sketch how the web should look like using paper wireframe and Low Fidelity Prototype using Figma.
-> I did usability study on three people and after improving based on the feedbacks, I created case study for the project.
+I used some imaginary characters (Persona) to consider people with different background, gender, occupations, etc...
+And I tried to set the problem and user experience with User Journey Map, User Story and Problem Statement.
+Before starting to build anything, I sketch how the web should look like using paper wireframe and Low Fidelity Prototype using Figma.
+I did usability study on three people and after improving based on the feedbacks, I created case study for the project.
 ### CICD Workflow
 > I used CircleCI for my countinuous integration and continuous deployment
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/Eenrics/Udacity-ML-app/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/Eenrics/Udacity-ML-app/tree/main)
@@ -42,27 +42,40 @@ Simply this app is for Students, Teachers, Professors or any one who loves and r
 * Jest
 * Render
 * Figma
+* docker
+* kubernetes
+* huskey
+* prettier
 
 ####
 
 ## Inspiration
-I see 
 ### Description
+Any local people know that, if you want to reserve a book, you have to be present in person there at the library. There is no garantee that when you go to the library that you will get the book you are looking for. This creates huge frustration among people, students and teachers.. especially those who sacrified alot just to go to the library.
 ### Problem trying to solve
+This application will solve the problem of being physically present at the local library just to reserve a book. You will have certain amount of days (usually three days) with in which you must come to the library and take the reserved book. If you did not take the book after those days, the book will expire and you have to reserve again if the book is available. When you take the book, the book will be marked as unavailable for reservation untill you returned the book. The web application uses websocket and apollo graphql subsription, that when two or more people are using the app and when one of them reserve the book, the server will notify all connected clients about the changes and it will be immediatly reflected on the users screen as unavailable.
 ### Still unsloved problems
-
+This application will not solve the following problems.
+* You will be able to read the book tile and author, but you won't be able to read the content of the book using this app.
+* This app will only avoid the need for physical availability to reserve the book. But to take the book, you have to be physically present.
+* 
 ####
 
 ## How to use it
 ### Installation and Running
-
+Got to this [url link](https://library-31bw.onrender.com/). Sign up. And start reserving books. For the time being, the datum are not real.
 ####
 
 ## Live DEMO and URL
-
+Coming soon. [url link](https://library-31bw.onrender.com/)
 ####
 
 ## Developer and License
 ### Developer
+Ebenezer Eshetie [GitHub](https://github.com/EbenGitHub) [LinkedIn](https://www.linkedin.com/in/abenezereshetie/) [Email](mailto:abenezergooo@gmail.com)
 ### License
+Released with MIT License.
 ### Contribute
+See CONTRIBUTE.md
+####
+© Copyright Reserved. Ebenezer Eshetie
