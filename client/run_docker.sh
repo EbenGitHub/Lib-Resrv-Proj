@@ -11,5 +11,5 @@ docker build --tag=app .
 docker image ls
 
 # Step 3: 
-# Run flask app
+# Run nodejs app
 docker run -p 3000:80 app
