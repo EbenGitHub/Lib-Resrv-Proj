@@ -17,6 +17,7 @@ const BookFragment = ({book, setNot, token}) => {
                 <h3 className='pt-3 md:mb-0 mb-3 ml-4 font-[700] text-xl'>{book.title}</h3>
             </div>
         </Link>
+        
         <Link to={`/books/${book.id}`} className={`md:w-2/5 w-4/5 text-white text-center md:p-1 p-3 md:m-0 m-3 rounded-xl drop-shadow-xl ${book.expired?.isExpired ? ' bg-yellow-500' : !book.expired && !book.available ? 'bg-rose-500' : !book.expired?.isExpired && !book.available ? 'bg-green-500' : 'bg-blue-500'}`}>
         {
              book.expired ? (book.expired.isExpired ? <p className='text-black font-[500]'>Your book expired {parseInt(book.expired.expiryDate) * -1} {book.expired.timeFormate} ago. Reserve again</p> : <>
@@ -24,6 +25,7 @@ const BookFragment = ({book, setNot, token}) => {
              </> ) : (book.available ? <p>This book is available for reservation</p> : <p>This book is not available for reservation</p>)
          }
         </Link>
+        
         <div className='bg-white h-full'>
          {
              book.available ? availableTag : (book.expired ? reservedTag : unavailableTag)

@@ -14,7 +14,7 @@ const Landing = () => {
                <div className="md:w-7/12 m-8 rounded-lg self-start">
                     <img src={img1} className='rounded-lg' alt='img' />
                     <h2 className='md:text-5xl text-3xl font-[700] text-gray-700 p-4 mb-9'>Reserve a book at your finger tip</h2>
-                    <p className='text-gray-500 md:text-4xl text-2xl pl-5 pb-6'>የሚፈልጉት መጽሃፍት በእጆ ካለው ስልክ ሪዘርቭ ያድርጉ</p>
+                    <p className='text-gray-500 md:text-4xl text-2xl pl-5 pb-6'>የሚፈልጉትን መጽሃፍት በእጆ ካለው ስልክ ሪዘርቭ ያድርጉ</p>
                 </div>
             </div>
             <div className='md:h-screen mb-20 flex flex-row bg-white rounded-xl'>
@@ -22,9 +22,9 @@ const Landing = () => {
                <div className='h-2/12 bg-gray-100 w-1/12 m-3 rounded-lg hidden md:block'></div>
                <div className='h-2/12 bg-gray-100 w-1/12 m-3 rounded-lg hidden md:block'></div>
                <div className="md:w-7/12 ml-5 rounded-lg md:self-start">
-                    <h2 className='md:text-5xl text-3xl font-[700] text-black p-4 md:mb-9'>Don't go to a  library doubting if the book you want exists. </h2>
+                    <h2 className='md:text-5xl text-3xl font-[700] text-black p-4 md:mb-9'>Don't go to a library doubting if the book you want will be available</h2>
                     <div className='flex md:flex-row-reverse flex-col'>
-                        <p className='md:text-4xl text-2xl font-[700] text-gray-500 p-4 md:m-5 md:w-4/12'>የትም መሄድ ሳይጠበቁበት ይዛው ባሉበት ለማንበብ መጽሃፎን በተጠባባቂ ያስውምጡ </p>
+                        <p className='md:text-4xl text-2xl font-[700] text-gray-500 p-4 md:m-5 md:w-4/12'>የትም መሄድ ሳይጠበቅቦት እዛው ባሉበት ለማንበብ መጽሃፎን በተጠባባቂ ያስቀምጡ </p>
                         <img src={img2} className='rounded-2xl w-8/12 p-2 md:p-0' alt='img' />
                     </div>
                 </div>
@@ -36,7 +36,7 @@ const Landing = () => {
                        </button>
                </div>
                <div className="md:w-8/12 md:p-0 p-4 md:ml-5 rounded-lg self-start">
-               <h2 className='md:text-5xl text-3xl font-[700] text-black p-4 md:mb-9'>Reserve a book at your home and pick when you are available. </h2>
+               <h2 className='md:text-5xl text-3xl font-[700] text-black p-4 md:mb-9'>Reserve a book at your home and pick it when you are available</h2>
                     <div className='flex md:flex-row-reverse flex-col'>
                         <p className='md:text-4xl text-2xl font-[700] text-gray-500 p-4 md:m-5 md:w-4/12'>ታዲያ ምን ይተብቃሉ። እዚህ ጋ ያለውን መስፈንጠሪያ በመንካት አሁኑኑ መጽሃፎን ረዘርቭ ያድርጉ</p>
                         <img src={img3} className='rounded-lg md:w-8/12' alt='img' />
