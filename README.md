@@ -64,6 +64,79 @@ This application will not solve the following problems.
 ## How to use it
 ### Installation and Running
 Got to this [url link](https://library-31bw.onrender.com/). Sign up. And start reserving books. For the time being, the datum are not real.
+If you prefer to install it locally and test it out for yourself..
+
+##### Using GitHub Codes
+> Pull the github repository
+####
+```bash
+git pull https://github.com/EbenGitHub/Lib-Resrv-Proj/
+```
+> Navigate to `server` directory and install dependencies
+####
+```bash
+cd server/
+npm install
+```
+> Run the apollo graphql, ws and express server
+####
+```bash
+npm start
+```
+> Install the dependecies for the frontend and Run the app
+####
+```bash
+cd ../client
+npm install
+npm run deploy
+```
+Go to `http://localhost:4000`. It is ready.
+
+##### Using Docker Images
+> Pull the github repository
+####
+```bash
+git pull https://github.com/EbenGitHub/Lib-Resrv-Proj/
+```
+> Install docker
+####
+```bash
+sudo apt install docker.io -y
+```
+> Go to `server` and `client` directory and run the scrept for building the docker image
+####
+```bash
+cd server/
+./run_docker.sh
+cd ../client
+./run_docker.sh
+```
+> you don't have to run `upload_docker.sh`
+
+##### Using Kubernetes Pods
+> Pull the github repository
+####
+```bash
+git pull https://github.com/EbenGitHub/Lib-Resrv-Proj/
+```
+> Install docker
+####
+```bash
+sudo apt install docker.io -y
+```
+> Install minikube and kubectl
+####
+```bash
+sudo apt install minikube kubectl -y
+```
+> Go to `server` and `client` directory and run the scrept for pulling the docker image and deploying to kubernetes cluster
+####
+```bash
+cd server/
+./run_docker.sh
+cd ../client
+./run_docker.sh
+```
 ####
 
 ## Live DEMO and URL
@@ -78,4 +151,4 @@ Released with MIT License.
 ### Contribute
 See CONTRIBUTE.md
 ####
-© Copyright Reserved. Ebenezer Eshetie
+> © Copyright Reserved. Ebenezer Eshetie
