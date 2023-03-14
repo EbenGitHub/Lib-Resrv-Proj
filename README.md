@@ -133,9 +133,9 @@ sudo apt install minikube kubectl -y
 ####
 ```bash
 cd server/
-./run_docker.sh
+./run_kubernetes.sh
 cd ../client
-./run_docker.sh
+./run_kubernetes.sh
 ```
 ####
 
