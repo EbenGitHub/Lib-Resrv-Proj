@@ -8,9 +8,9 @@ const LoadingDetail = () => {
                     <span className='pt-3 md:mb-0 ml-4 bg-gray-200 inline-block h-3 rounded w-28 animate-pulse'></span>
                 </div>
 
-                <div className='md:w-2/5 w-4/5 text-white text-center md:p-1 p-3 md:m-0 m-3 rounded-xl drop-shadow-xl animate-pulse'>
+                <div className='md:w-2/5 w-4/5 text-white text-center bg-gray-600 md:p-1 p-3 md:m-0 m-3 rounded-xl drop-shadow-xl animate-pulse'>
                     <span className='mt-3 ml-3 bg-white inline-block h-2 rounded w-10/12'></span>
-                    <span className='mt-3 ml-3 bg-white inline-block h-2 rounded w-4/12'></span>
+                    <span className='mt-3 ml-3 bg-white inline-block h-2 rounded w-4/12 md:block hidden'></span>
                 </div>
                 <div className='bg-white h-full'>
 

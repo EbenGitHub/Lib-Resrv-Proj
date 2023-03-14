@@ -3,24 +3,14 @@ import * as Yup from 'yup';
 import { Link } from 'react-router-dom';
 import { useSignup } from '../hooks/useSignup';
 import { useNavigate } from 'react-router-dom';
-
-const passwordValidation = (psw) => {
-  let valid = true
-  let regexpltr = /[a-z]{3,}/i
-  let regexpdgt = /\d{3,}/i
-  let regexpsml = /[@#$%^&*]{3,}/i
-  valid = regexpltr.test(psw) && regexpdgt.test(psw) && regexpsml.test(psw);
-  return valid ? {
-    isValid: true,
-  } : {
-    isValid: false,
-    errorMessage: 'Password should contain atleast three letters, three numbers and one of symbols @ # $ % ^ & *',
-  }
-}
+import { useShowHidPass } from '../hooks/useShowHidPass';
+import passwordValidation from '../utils/validate';
  
 const SignUp = ({setNot, token}) => {
     const signup = useSignup({setNot})
     const navigate = useNavigate()
+    const [pass, ButtonPass] = useShowHidPass()
+    const [passcnf, ButtonPassCnf] = useShowHidPass()
 
     const professions = ['Student', 'Employee', 'Employer', 'Others'];
     const formik = useFormik({
@@ -50,21 +40,21 @@ const SignUp = ({setNot, token}) => {
                         .string()
                         .oneOf(professions, 'The profession you chose does not exist'),
             password: Yup
-                  .string()
-                  .min(10, 'Password should be atleast ten characters long')
-                  .required('Password is required')
-                  .test('validator-custom-name', function (value) {
-                    const validation = passwordValidation(value);
-                    if (!validation.isValid) {
-                      return this.createError({
-                        path: this.path,
-                        message: validation.errorMessage,
-                      });
-                    }
-                    else {
-                      return true;
-                    }
-                  }),
+                    .string()
+                    .min(10, 'Password should be atleast ten characters long')
+                    .required('Password is required')
+                    .test('validator-custom-name', function (value) {
+                      const validation = passwordValidation(value);
+                      if (!validation.isValid) {
+                        return this.createError({
+                          path: this.path,
+                          message: validation.errorMessage,
+                        });
+                      }
+                      else {
+                        return true;
+                      }
+                    }),
             passwordcnf: Yup
                   .string()
                   .required('Password confirmation is required')
@@ -111,9 +101,12 @@ const SignUp = ({setNot, token}) => {
 
             <div className='mb-4'>
               <label htmlFor="password">Password</label>
-              <input type="password" name="password" id="password"
-                className={`block w-full rounded border-2 py-1 px-2 ${formik.touched.password && formik.errors.password ? 'border-red-500' : 'border-gray-300'}`}
-                onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.password} />
+              <div className='flex flex-row'>
+                <input type={pass} name="password" id="password"
+                  className={`block w-full rounded border-2 py-1 px-2 ${formik.touched.password && formik.errors.password ? 'border-red-500' : 'border-gray-300'}`}
+                  onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.password} />
+                  <ButtonPass />
+              </div>
               {formik.touched.password && formik.errors.password && (
                 <span className='text-red-500'>{formik.errors.password}</span>
               )}
@@ -121,9 +114,12 @@ const SignUp = ({setNot, token}) => {
 
             <div className='mb-4'>
               <label htmlFor="passwordcnf">Confirm Password</label>
-              <input type="password" name="passwordcnf" id="passwordcnf"
-                className={`block w-full rounded border-2 py-1 px-2 ${formik.touched.passwordcnf && formik.errors.passwordcnf ? 'border-red-500' : 'border-gray-300'}`}
-                onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.passwordcnf} />
+              <div className='flex flex-row'>
+                <input type={passcnf} name="passwordcnf" id="passwordcnf"
+                  className={`block w-full rounded border-2 py-1 px-2 ${formik.touched.passwordcnf && formik.errors.passwordcnf ? 'border-red-500' : 'border-gray-300'}`}
+                  onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.passwordcnf} />
+                  <ButtonPassCnf />
+              </div>
               {formik.touched.passwordcnf && formik.errors.passwordcnf && (
                 <span className='text-red-500'>{formik.errors.passwordcnf}</span>
               )}

@@ -159,7 +159,7 @@ const resolvers = {
         return {isExpired, expiryDate, timeFormate}
       },
       reservationHistory: async(root, _args, {currUser}) => {
-        if (!currUser) return []
+        if (!currUser) return [`You need to login to see your reservation histories`]
         const history = root.reservationHistory.filter(h => {
           let his = JSON.parse(h)
           if (his.reserverUser === currUser.id) {
@@ -169,7 +169,7 @@ const resolvers = {
           }
         }).map(h => {
           const his = JSON.parse(h)
-          return `You reserved this book at ${his.reservationDate} ${his.releaseDate ? `and released the book at ${his.releaseDate}` : `and the book taking date has expired`}`
+          return `You reserved this book at ${his.reservationDate} ${his.releaseDate ? `and released the book at ${his.releaseDate}` : root.expired?.isExpired ? `and the book taking date has expired` : `and you have not released the book yet`}`
         })
         return history
       }

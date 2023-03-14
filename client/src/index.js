@@ -8,15 +8,10 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import { getMainDefinition } from '@apollo/client/utilities'
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
 import { createClient } from 'graphql-ws'
+import uri from './utils/config'
 
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem('library-user-token')
-
-  // const BACKEND_URL = 'http://localhost:4000'
-  // const WS_URL = 'ws://localhost:4000'
-
-  // const BACKEND_URL = 'https://lib-backend-atg1.onrender.com/'
-  // const WS_URL = 'ws://lib-backend-atg1.onrender.com/'
 
   return {
     headers: {
@@ -27,11 +22,11 @@ const authLink = setContext((_, { headers }) => {
 })
 
 const httpLink = createHttpLink({
-  uri: 'https://lib-backend-atg1.onrender.com/',
+  uri: uri.BACKEND_URL,
 })
   
 const wsLink = new GraphQLWsLink(
-  createClient({ url: 'ws://lib-backend-atg1.onrender.com/'})
+  createClient({ url: uri.WS_URL})
 )
 
 const splitLink = split(

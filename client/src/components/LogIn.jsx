@@ -3,10 +3,12 @@ import * as Yup from 'yup';
 import { Link } from 'react-router-dom';
 import { useLogin } from '../hooks/useLogin';
 import { useNavigate } from 'react-router-dom';
+import { useShowHidPass } from '../hooks/useShowHidPass';
 
 const LogIn = ({setNot, setToken, token}) => {
     const login = useLogin({setNot, setToken})
     const navigate = useNavigate()
+    const [pass, Button] = useShowHidPass()
 
     const formik = useFormik({
         initialValues: {
@@ -25,10 +27,10 @@ const LogIn = ({setNot, setToken, token}) => {
             username: Yup
                     .string()
                     .label('user name')
-                    .required(),
+                    .required('Username is required'),
             password: Yup
                   .string()
-                  .required()
+                  .required('Password is required')
           })
       })
 
@@ -54,9 +56,12 @@ const LogIn = ({setNot, setToken, token}) => {
 
             <div className='mb-4'>
               <label htmlFor="password">Password</label>
-              <input type="password" name="password" id="password"
-                className={`block w-full rounded border-2 py-1 px-2 ${formik.touched.password && formik.errors.password ? 'border-red-500' : 'border-gray-300'}`}
-                onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.password} />
+              <div className='flex flex-row'>
+                <input type={pass} name="password" id="password"
+                  className={`block w-full rounded border-2 py-1 px-2 ${formik.touched.password && formik.errors.password ? 'border-red-500' : 'border-gray-300'}`}
+                  onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.password} />
+                  <Button />
+              </div>
               {formik.touched.password && formik.errors.password && (
                 <span className='text-red-500'>{formik.errors.password}</span>
               )}
