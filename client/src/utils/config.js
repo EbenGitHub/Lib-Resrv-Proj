@@ -10,8 +10,8 @@ const WS_URL_LOC = 'ws://localhost:4000'
 //  Backend url for cloud
 // const BACKEND_URL_ONL = 'https://lib-backend-atg1.onrender.com/'
 // const WS_URL_ONL = 'ws://lib-backend-atg1.onrender.com/'
-const BACKEND_URL_ONL = 'https://localhost/'
-const WS_URL_ONL = 'ws://localhost/'
+const BACKEND_URL_ONL = 'https://library-31bw.onrender.com'
+const WS_URL_ONL = 'ws://library-31bw.onrender.com'
 
 const status = process.env.STATUS || STATUS
 
