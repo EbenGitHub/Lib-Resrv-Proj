@@ -11,6 +11,13 @@ import { createClient } from 'graphql-ws'
 
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem('library-user-token')
+
+  // const BACKEND_URL = 'http://localhost:4000'
+  // const WS_URL = 'ws://localhost:4000'
+
+  // const BACKEND_URL = 'https://lib-backend-atg1.onrender.com/'
+  // const WS_URL = 'ws://lib-backend-atg1.onrender.com/'
+
   return {
     headers: {
       ...headers,
@@ -20,11 +27,11 @@ const authLink = setContext((_, { headers }) => {
 })
 
 const httpLink = createHttpLink({
-  uri: process.env.BACKEND_URL || 'http://localhost:4000',
+  uri: 'https://lib-backend-atg1.onrender.com/',
 })
   
 const wsLink = new GraphQLWsLink(
-  createClient({ url: process.env.WS_URL || 'ws://localhost:4000' })
+  createClient({ url: 'ws://lib-backend-atg1.onrender.com/'})
 )
 
 const splitLink = split(
