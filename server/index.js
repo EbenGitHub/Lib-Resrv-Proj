@@ -13,6 +13,7 @@ const http = require('http')
 const { WebSocketServer } = require('ws')
 const { useServer } = require('graphql-ws/lib/use/ws')
 const Config = require('./config')
+const path = require('path');
 
 mongoose.set('strictQuery', false)
 
@@ -33,6 +34,13 @@ mongoose.connect(MONGODB_URI)
 
 const start = async () => {
   const app = express()
+  
+  app.use(express.static(path.join(__dirname, 'build')));
+
+  app.get('/', function (req, res) {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  });
+  
   const httpServer = http.createServer(app)
 
   const wsServer = new WebSocketServer({

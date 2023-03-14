@@ -25,6 +25,7 @@
     "build": "react-scripts build",
     "serve": "serve -s build",
     "test": "react-scripts test",
+    "deploy": "cross-env npm run build && rm ../server/build/ -rf && cp build/ ../server/ -rp",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
