@@ -19,12 +19,14 @@ const authLink = setContext((_, { headers }) => {
     }
   })
 
+  console.log(process.env.BACKEND_URL, process.env.WS_URL)
+
   const httpLink = createHttpLink({
-    uri: 'http://localhost:4000',
+    uri: process.env.BACKEND_URL || 'http://localhost:4000',
   })
   
 const wsLink = new GraphQLWsLink(
-  createClient({ url: 'ws://localhost:4000' })
+  createClient({ url: process.env.WS_URL || 'ws://localhost:4000' })
 )
 
 const splitLink = split(
