@@ -58,7 +58,7 @@ This application will solve the problem of being physically present at the local
 This application will not solve the following problems.
 * You will be able to read the book tile and author, but you won't be able to read the content of the book using this app.
 * This app will only avoid the need for physical availability to reserve the book. But to take the book, you have to be physically present.
-* 
+
 ####
 
 ## How to use it
