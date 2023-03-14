@@ -147,8 +147,8 @@ Coming soon. [url link](https://library-31bw.onrender.com/)
 ### Developer
 Ebenezer Eshetie [GitHub](https://github.com/EbenGitHub) [LinkedIn](https://www.linkedin.com/in/abenezereshetie/) [Email](mailto:abenezergooo@gmail.com)
 ### License
-Released with MIT License.
+Released with `MIT License`.
 ### Contribute
-See CONTRIBUTE.md
+See `CONTRIBUTE.md`
 ####
 > © Copyright Reserved. Ebenezer Eshetie
