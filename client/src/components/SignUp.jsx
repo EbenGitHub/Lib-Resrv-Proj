@@ -1,27 +1,27 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Link } from 'react-router-dom';
-import { useMutation } from '@apollo/client';
-import { CREATE_USER } from '../gql/mutations';
+import { useSignup } from '../hooks/useSignup';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
 
+const passwordValidation = (psw) => {
+  let valid = true
+  let regexpltr = /[a-z]{3,}/i
+  let regexpdgt = /\d{3,}/i
+  let regexpsml = /[@#$%^&*]{3,}/i
+  valid = regexpltr.test(psw) && regexpdgt.test(psw) && regexpsml.test(psw);
+  return valid ? {
+    isValid: true,
+  } : {
+    isValid: false,
+    errorMessage: 'Password should contain atleast three letters, three numbers and one of symbols @ # $ % ^ & *',
+  }
+}
+ 
+const SignUp = ({setNot, token}) => {
+    const signup = useSignup({setNot})
+    const navigate = useNavigate()
 
-const SignUp = ({setNot}) => {
-  const navigate = useNavigate()
-  const [singup, result] = useMutation(CREATE_USER, {
-    onError: (error) => {
-      console.log(error.graphQLErrors[0].message)
-      setNot({title: error.graphQLErrors[0].extensions.reason.toUpperCase(), link: {title: 'Already have an account ? Login', anchor: './login'}})
-    }
-  })
-  useEffect(() => {
-    if ( result.data ) {
-      setNot({title: 'signup was successfully', status: 'success'})
-      setNot({title: 'You need to login with your new account', status: 'warning'})
-      navigate('/login')
-    }
-  }, [result.data]) // eslint-disable-line
     const professions = ['Student', 'Employee', 'Employer', 'Others'];
     const formik = useFormik({
         initialValues: {
@@ -32,7 +32,7 @@ const SignUp = ({setNot}) => {
         },
         onSubmit: function (values) {
             console.log(values)
-            singup({
+            signup({
               variables: {
                 username: values.username,
                 password: values.password,
@@ -44,26 +44,46 @@ const SignUp = ({setNot}) => {
             username: Yup
                     .string()
                     .label('user name')
-                    .required()
+                    .required('Username is required')
                     .min(4, 'username should be atleast 4 characters long'),
             profession: Yup
                         .string()
                         .oneOf(professions, 'The profession you chose does not exist'),
             password: Yup
                   .string()
-                  .min(10)
-                  .required(),
+                  .min(10, 'Password should be atleast ten characters long')
+                  .required('Password is required')
+                  .test('validator-custom-name', function (value) {
+                    const validation = passwordValidation(value);
+                    if (!validation.isValid) {
+                      return this.createError({
+                        path: this.path,
+                        message: validation.errorMessage,
+                      });
+                    }
+                    else {
+                      return true;
+                    }
+                  }),
             passwordcnf: Yup
                   .string()
-                  .required()
+                  .required('Password confirmation is required')
                   .oneOf([Yup.ref('password'), null], 'Passwords must match')
           })
       })
+
+          
+      if (token) {
+        setNot({title: 'You are already signed in!', status: 'warning'})
+        navigate('/books')
+        return
+      }
     
       return (
         <div className="bg-blue-200 min-w-screen py-40 min-h-screen overflow-x-hidden">
           <form onSubmit={formik.handleSubmit} className="max-w-lg mx-auto bg-white rounded shadow-lg mt-7 p-3">
           <h1 className='text-3xl mb-3 text-center'>Register</h1>
+           
             <div className='mb-4'>
               <label htmlFor="username">Choose username</label>
               <input type="text" name="username" id="username" 

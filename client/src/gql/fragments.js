@@ -5,6 +5,7 @@ fragment Books on Book {
     title
       reservedDate
       reserved
+      author
       reservedBy {
         id
       }
@@ -23,6 +24,7 @@ export const MY_BOOKS = gql`
 fragment MyBooks on Book {
   title
     reservedDate
+    author
     catagory
     reservationHistory
     reserved

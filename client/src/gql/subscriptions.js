@@ -5,6 +5,7 @@ subscription {
     bookReserved {
       id
       reservedDate
+      author
       reserved
       available
       title
@@ -21,6 +22,7 @@ subscription {
     bookReleased {
       id
       reservedDate
+      author
       reserved
       available
       title

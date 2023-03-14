@@ -1,32 +1,13 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Link } from 'react-router-dom';
-import { useMutation, useApolloClient } from '@apollo/client';
-import { LOGIN } from '../gql/mutations';
-import { useEffect } from 'react';
+import { useLogin } from '../hooks/useLogin';
 import { useNavigate } from 'react-router-dom';
 
-const LogIn = ({setNot, setToken}) => {
-  const navigate = useNavigate()
-  const client = useApolloClient()
-  const [login, result] = useMutation(LOGIN, {
-    onError: (error) => {
-      console.log(error.graphQLErrors[0].message)
-      setNot({title: error.graphQLErrors[0].extensions.reason.toUpperCase(), link: {title: 'New to this website ? Signup', anchor: './signup'}})
-    }
-  })
-  useEffect(() => {
-    if ( result.data ) {
-      const token = result.data.login.value
-      const id = result.data.login.id
-      setToken(token)
-      localStorage.setItem('library-user-token', token)
-      localStorage.setItem('library-user-id', id)
-      setNot({title: 'logged in successfully', status: 'success'})
-      client.resetStore()
-      navigate('/books')
-    }
-  }, [result.data]) // eslint-disable-line
+const LogIn = ({setNot, setToken, token}) => {
+    const login = useLogin({setNot, setToken})
+    const navigate = useNavigate()
+
     const formik = useFormik({
         initialValues: {
           username: '',
@@ -50,6 +31,12 @@ const LogIn = ({setNot, setToken}) => {
                   .required()
           })
       })
+
+      if (token) {
+        setNot({title: 'You are already logged in!', status: 'warning'})
+        navigate('/books')
+        return
+      }
     
       return (
         <div className="bg-blue-200 min-w-screen py-40 min-h-screen overflow-x-hidden">

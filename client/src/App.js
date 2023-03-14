@@ -7,10 +7,11 @@ import LogIn from './components/LogIn'
 import SignUp from './components/SignUp'
 import Landing from './components/Landing'
 import Books from './components/Books'
-import Book from './components/Book'
+import Book from './components/Book/Book'
 import MyReservations from './components/MyReservations'
 import * as uuid from 'uuid'
 import Notify from './components/Notify'
+import Footer from './components/Footer'
 
 const App = () => {
   const [token, setToken] = useState(null)
@@ -38,13 +39,14 @@ const App = () => {
         <NavBar token={token} setToken={setToken} setNot={setNot}/>
         <Notify notify={notify} deleNot={deleNot}/>
         <Routes>
-          <Route path='/signup' element={<SignUp setNot={setNot}/>} />
-          <Route path='/login' element={<LogIn setToken={setToken} setNot={setNot}/>} />
+          <Route path='/signup' element={<SignUp setNot={setNot} token={token}/>} />
+          <Route path='/login' element={<LogIn setToken={setToken} setNot={setNot} token={token}/>} />
           <Route path='/' element={<Landing />} />  
           <Route path='/books' element={<Books setNot={setNot} token={token}/>} />
           <Route path='/books/:id' element={<Book setNot={setNot} token={token}/>} />
           <Route path='/reservations' element={<MyReservations setNot={setNot} token={token}/>} />
         </Routes>
+        <Footer />
       </div>
   )
 }
