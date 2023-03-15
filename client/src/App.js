@@ -12,6 +12,7 @@ import MyReservations from './components/MyReservations'
 import * as uuid from 'uuid'
 import Notify from './components/Notify'
 import Footer from './components/Footer'
+import ErrorRoutes from './components/Error/ErrorRoute'
 
 const App = () => {
   const [token, setToken] = useState(null)
@@ -45,6 +46,7 @@ const App = () => {
           <Route path='/books' element={<Books setNot={setNot} token={token}/>} />
           <Route path='/books/:id' element={<Book setNot={setNot} token={token}/>} />
           <Route path='/reservations' element={<MyReservations setNot={setNot} token={token}/>} />
+          <Route path='*' element={<ErrorRoutes />} />
         </Routes>
         <Footer />
       </div>
