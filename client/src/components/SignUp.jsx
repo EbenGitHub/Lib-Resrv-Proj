@@ -1,13 +1,12 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Link } from 'react-router-dom';
-import { useSignup } from '../hooks/useSignup';
 import { useNavigate } from 'react-router-dom';
 import { useShowHidPass } from '../hooks/useShowHidPass';
 import passwordValidation from '../utils/validate';
+import Verify from './Verify';
  
-const SignUp = ({setNot, token}) => {
-    const signup = useSignup({setNot})
+const SignUp = ({setNot, token, setForm}) => {
     const navigate = useNavigate()
     const [pass, ButtonPass] = useShowHidPass()
     const [passcnf, ButtonPassCnf] = useShowHidPass()
@@ -16,19 +15,14 @@ const SignUp = ({setNot, token}) => {
     const formik = useFormik({
         initialValues: {
           username: '',
+          email: '',
           password: '',
           passwordcnf: '',
           profession: professions[0],
         },
         onSubmit: function (values) {
-            console.log(values)
-            signup({
-              variables: {
-                username: values.username,
-                password: values.password,
-                profession: values.profession
-              }
-            })
+          setForm(values)
+          navigate('/verify')
         },
         validationSchema: Yup.object({
             username: Yup
@@ -36,6 +30,10 @@ const SignUp = ({setNot, token}) => {
                     .label('user name')
                     .required('Username is required')
                     .min(4, 'username should be atleast 4 characters long'),
+            email: Yup
+                    .string()
+                    .email('Email must be a valid email')
+                    .required('Email is required'),
             profession: Yup
                         .string()
                         .oneOf(professions, 'The profession you chose does not exist'),
@@ -81,6 +79,16 @@ const SignUp = ({setNot, token}) => {
                 onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.username} />
               {formik.touched.username && formik.errors.username && (
                 <span className='text-red-500'>{formik.errors.username}</span>
+              )}
+            </div>
+           
+            <div className='mb-4'>
+              <label htmlFor="email">Input Email address</label>
+              <input type="email" name="email" id="email" 
+                className={`block w-full rounded border-2 py-1 px-2 ${formik.touched.email && formik.errors.email ? 'border-red-500' : 'border-gray-300'}`}
+                onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.email} />
+              {formik.touched.email && formik.errors.email && (
+                <span className='text-red-500'>{formik.errors.email}</span>
               )}
             </div>
 

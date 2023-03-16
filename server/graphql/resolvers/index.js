@@ -169,7 +169,7 @@ const resolvers = {
           }
         }).map(h => {
           const his = JSON.parse(h)
-          return `You reserved this book at ${his.reservationDate} ${his.releaseDate ? `and released the book at ${his.releaseDate}` : root.expired?.isExpired ? `and the book taking date has expired` : `and you have not released the book yet`}`
+          return `You reserved this book at ${his.reservationDate} ${his.releaseDate ? `and released the book at ${his.releaseDate}` : root.expired?.isExpired || isResrvExp(root.releaseDate) ? `and the book taking date has expired` : `and you have not released the book yet`}`
         })
         return history
       }

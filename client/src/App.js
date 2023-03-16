@@ -13,10 +13,15 @@ import * as uuid from 'uuid'
 import Notify from './components/Notify'
 import Footer from './components/Footer'
 import ErrorRoutes from './components/Error/ErrorRoute'
+import Verify from './components/Verify'
+import { useRef } from 'react';
+
 
 const App = () => {
   const [token, setToken] = useState(null)
   const [notify, setNotify] = useState([])
+  const [form, setForm] = useState({})
+
   useEffect(() => {
     const tk = localStorage.getItem('library-user-token')
     if (tk) {
@@ -40,12 +45,13 @@ const App = () => {
         <NavBar token={token} setToken={setToken} setNot={setNot}/>
         <Notify notify={notify} deleNot={deleNot}/>
         <Routes>
-          <Route path='/signup' element={<SignUp setNot={setNot} token={token}/>} />
+          <Route path='/signup' element={<SignUp setNot={setNot} token={token} setForm={setForm}/>} />
           <Route path='/login' element={<LogIn setToken={setToken} setNot={setNot} token={token}/>} />
           <Route path='/' element={<Landing />} />  
           <Route path='/books' element={<Books setNot={setNot} token={token}/>} />
           <Route path='/books/:id' element={<Book setNot={setNot} token={token}/>} />
           <Route path='/reservations' element={<MyReservations setNot={setNot} token={token}/>} />
+          <Route path='/verify' element={<Verify setNot={setNot} form={form}/>} />
           <Route path='*' element={<ErrorRoutes />} />
         </Routes>
         <Footer />
