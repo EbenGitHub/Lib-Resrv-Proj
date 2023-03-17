@@ -31,10 +31,12 @@ const fun = async () => {
 
         const user1 = new User({
             username: "ebenezer esh",
+            email: "ebe.goo@gmail.com",
             hashedPassword: hashedPassword
         })
         const user2 = new User({
             username: "samuel mat",
+            email: "sam.m@gmail.com",
             hashedPassword: hashedPassword
         })
 
