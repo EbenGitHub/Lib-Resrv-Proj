@@ -14,7 +14,6 @@ import Notify from './components/Notify'
 import Footer from './components/Footer'
 import ErrorRoutes from './components/Error/ErrorRoute'
 import Verify from './components/Verify'
-import { useRef } from 'react';
 
 
 const App = () => {
@@ -29,7 +28,7 @@ const App = () => {
     } else {
       setNot({title: 'you are not logged in. Please log in to enjoy full features', status: 'warning', link: {title: 'click here to log in', anchor: '/login'}})
     }
-  }, [])
+  }, []) // eslint-disable-line
 
   const setNot = (msg) => {
     const id = uuid.v4()
@@ -51,7 +50,9 @@ const App = () => {
           <Route path='/books' element={<Books setNot={setNot} token={token}/>} />
           <Route path='/books/:id' element={<Book setNot={setNot} token={token}/>} />
           <Route path='/reservations' element={<MyReservations setNot={setNot} token={token}/>} />
-          <Route path='/verify' element={<Verify setNot={setNot} form={form}/>} />
+          {
+            form.email ? <Route path='/verify' element={<Verify setNot={setNot} form={form} />} /> : null
+          }
           <Route path='*' element={<ErrorRoutes />} />
         </Routes>
         <Footer />

@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useShowHidPass } from '../hooks/useShowHidPass';
 import passwordValidation from '../utils/validate';
-import Verify from './Verify';
  
 const SignUp = ({setNot, token, setForm}) => {
     const navigate = useNavigate()
