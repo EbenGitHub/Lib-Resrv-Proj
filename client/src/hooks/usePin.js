@@ -24,6 +24,7 @@ export const usePin = ({setNot, form}) => {
                     signup({
                         variables: {
                           username: form.username,
+                          email: form.email,
                           password: form.password,
                           profession: form.profession
                         }

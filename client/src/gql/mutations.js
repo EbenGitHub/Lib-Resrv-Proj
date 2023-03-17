@@ -43,8 +43,8 @@ mutation($id: ID!) {
 `
 
 export const CREATE_USER = gql`
-mutation($username: String!, $password: String!, $profession: String!) {
-    createUser(username: $username, password: $password, profession: $profession) {
+mutation($email: String!, $username: String!, $password: String!, $profession: String!) {
+    createUser(username: $username, password: $password, profession: $profession, email: $email) {
       username
     }
   }

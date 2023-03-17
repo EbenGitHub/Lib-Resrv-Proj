@@ -185,9 +185,10 @@ const resolvers = {
           }
         })
         let username = args.username
+        let email = args.email
         let profession = args.profession
         let hashedPassword = await bcrypt.hash(args.password, saltRounds)
-        let user = new User({username, hashedPassword, profession})
+        let user = new User({username, hashedPassword, profession, email})
               
         try {
           await user.save()
