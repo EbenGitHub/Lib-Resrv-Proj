@@ -3,6 +3,7 @@ const typeDefs = `
   type User {
     id: ID!
     username: String!
+    email: String!
     reservedBooks: [Book]!
     reservedBookCounts: Int!
   }
@@ -42,6 +43,7 @@ const typeDefs = `
   type Mutation {
     createUser(
       username: String!
+      email: String!
       profession: String!
       password: String!
     ): User

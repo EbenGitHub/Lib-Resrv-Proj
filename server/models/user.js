@@ -9,6 +9,11 @@ const schema = new mongoose.Schema({
     unique: true,
     minlength: 4
   },
+  email: {
+    type: String,
+    required: true,
+    unique: true
+  },
   profession: {
     type: String,
   },
