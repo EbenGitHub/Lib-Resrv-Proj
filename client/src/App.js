@@ -34,7 +34,6 @@ const App = () => {
     }
   }, []) // eslint-disable-line
 
-
   return (
       <div>
         <NavBar/>

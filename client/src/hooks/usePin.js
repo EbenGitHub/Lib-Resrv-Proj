@@ -56,7 +56,7 @@ export const usePin = ({form}) => {
             dispatch(createNotification({title: `Hi ${form.username}👋.Verification pin was sent to ${form.email}. Please check your email.`, status: 'success'}))
         })
         .catch((e) => {
-            dispatch(createNotification({title: `Error happend while sending email message. Are you sure ${form.email} is your email address? ${e.text}`, status: 'danger'}))
+            dispatch(createNotification({title: `Error happend while sending email message. Are you sure ${form.email} is your email address or are you connected to the internet? ${e.text}`, status: 'danger'}))
         })
     }
 

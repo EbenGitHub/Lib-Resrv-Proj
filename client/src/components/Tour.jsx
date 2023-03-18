@@ -42,7 +42,7 @@ const Tour = () => {
      null
     ]
 
-    return <div className="bg-cyan-500 z-30 m-5 rounded-xl w-11/12 ml-9 border-2 border-cyan-900 drop-shadow-xl text-white font-[700] mt-20 p-5 fixed flex flex-row items-center justify-between">
+    return <div className="md:flex hidden bg-cyan-500 z-30 m-5 rounded-xl w-11/12 ml-9 border-2 border-cyan-900 drop-shadow-xl text-white font-[700] mt-20 p-5 fixed flex flex-row items-center justify-between">
         {
             authentication ? <>
                         {
