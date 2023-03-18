@@ -1,4 +1,7 @@
-// require('dotenv').config()
+// Emailjs Service Variables
+export const EMAIL_SERVICE_ID = 'service_lcp53nu'
+export const EMAIL_TEMPLATE_ID = 'template_1gumj1e'
+export const PUBLIC_API_KEY = 'Bgn7EOGkCKW87zLNw'
 
 // Status of the Backend ['local', 'online']
 const STATUS='online'
