@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path');
-const Config = require('../config')
+// const Config = require('../config')
 
 const hisMake = (d) => {
     switch(d.action) {
@@ -28,7 +28,7 @@ const hisMake = (d) => {
 const logger = (rawData) => {
     const data = hisMake(rawData)
     // Config.MODE !== "production" && console.log(data)
-    fs.writeFile(path.join(__dirname, 'history.log'), '\n'+data, {flag: 'a+'}, (err) => console.log(err))
+    fs.writeFile(path.join(__dirname, 'history.log'), '\n'+data, {flag: 'a+'}, (err) => null)
 }
 
 module.exports = logger

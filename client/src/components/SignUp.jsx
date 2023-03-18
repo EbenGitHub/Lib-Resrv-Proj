@@ -6,15 +6,25 @@ import { useShowHidPass } from '../hooks/useShowHidPass';
 import passwordValidation from '../utils/validate';
 import { useDispatch, useSelector } from 'react-redux';
 import { createNotification } from '../reducers/notificationReducer';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const SignUp = ({setForm}) => {
     const dispatch = useDispatch()
     const authentication = useSelector(state => state.authentication)
 
+    const [show] = useState(true)
+
     const navigate = useNavigate()
     const [pass, ButtonPass] = useShowHidPass()
     const [passcnf, ButtonPassCnf] = useShowHidPass()
+
+     useEffect(() => {
+      if (authentication && show) {
+        dispatch(createNotification({title: 'You are already signed in!', status: 'warning'}))
+        navigate('/books')
+        return
+      }
+     }, [authentication]) // eslint-disable-line
 
     const professions = ['Student', 'Employee', 'Employer', 'Others'];
     const formik = useFormik({
@@ -64,15 +74,6 @@ const SignUp = ({setForm}) => {
                   .oneOf([Yup.ref('password'), null], 'Passwords must match')
           })
       })
-
-          
-     useEffect(() => {
-      if (authentication) {
-        dispatch(createNotification({title: 'You are already signed in!', status: 'warning'}))
-        navigate('/books')
-        return
-      }
-     }, []) // eslint-disable-line
     
       return (
         <div className="bg-blue-200 min-w-screen py-40 min-h-screen overflow-x-hidden">

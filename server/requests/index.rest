@@ -4,3 +4,11 @@ Content-Type: application/json
 {
     "query" : "query { status { health mode version } }"
 }
+
+###
+POST http://localhost:4000
+Content-Type: application/json
+
+{
+    "query" : 'mutation { login(username: "mdridrrrrrrrrr", password: "asdfgh123@") { value id } }'
+}

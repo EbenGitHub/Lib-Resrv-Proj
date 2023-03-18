@@ -50,7 +50,6 @@ export const usePin = ({form}) => {
     
     const reSend = () => {
         PRIVATE_PIN = generatePin()
-        console.log(PRIVATE_PIN)
         setStt('waiting')
         sendEmail({name: form.username, email: form.email, pin: PRIVATE_PIN})
         .then(() => {
