@@ -3,69 +3,32 @@ import { useEffect } from "react"
 import { RELEASE_BOOK } from "../gql/mutations"
 import {ME} from '../gql/queries'
 import { useNavigate } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux"
+import { createNotification } from "../reducers/notificationReducer"
 
-export const useRelease = (setNot, token) => {
+export const useRelease = () => {
+    const dispatch = useDispatch()
+    const authentication = useSelector(state => state.authentication)
+
     const navigate = useNavigate()
     const [release, relResult] =  useMutation(RELEASE_BOOK, {
         onError: (error) => {
-            setNot({title: error.graphQLErrors[0].message})
+            dispatch(createNotification({title: error.graphQLErrors[0].message}))
         },
         refetchQueries: [{query: ME}],
-        // update: (cache, response) => {
-        // //     cache.updateQuery({ query: ALL_BOOKS}, ({ books }) => {
-        // //     return {
-        // //       books: books.map(b => {
-        // //           if (b.id === response.data.releaseBook.id) {
-        // //               return response.data.releaseBook
-        // //           } else {
-        // //               return b
-        // //           }
-        // //       }),
-        // //     }
-        // //   })
-        // //   cache.updateQuery({ query: ME}, ({ me }) => {
-        // //     return {
-        // //     me: {...me, reservedBooks: me.reservedBooks.map(b => {
-        // //         if (b.id === response.data.releaseBook.id) {
-        // //             return response.data.releaseBook
-        // //         } else {
-        // //             return b
-        // //         }
-        // //     }), reservedBookCounts: me.reservedBookCounts - 1},
-        // //     }
-        // // })
-        // //   cache.updateQuery({ query: ME}, ({ me }) => {
-        // //     return {
-        // //     me: {...me, reservedBooks: me.reservedBooks.filter(b => b.id !== response.data.reserveBook.id), reservedBookCounts: me.reservedBookCounts - 1},
-        // //     }
-        // // })
-        // //     cache.updateQuery({ query: gql`
-        // //     query {
-        // //         book(id: "${response.data.releaseBook.id}") {
-        // //         ...MyBooks
-        // //         }
-        // //     }
-            
-        // //     ${MY_BOOKS}
-        // //     `}, ({ book }) => {
-        // //         return {
-        // //         book: response.data.releaseBook,
-        // //         }
-        // //     })
-        // },
       })
 
       useEffect(() => {
         if ( relResult.data ) {
             relResult.data && relResult.data.releaseBook ? 
-                setNot({title: 'releasing the book was successful', status: 'success'}) : 
-                setNot({title: 'something went wrong. Please refresh the page!', status: 'danger'})
+                dispatch(createNotification({title: 'releasing the book was successful', status: 'success'})) : 
+                dispatch(createNotification({title: 'something went wrong. Please refresh the page!', status: 'danger'}))
         }
       }, [relResult.data]) // eslint-disable-line
 
       const releaseBook = (id) => {
-        if (!token) {
-            setNot({title: 'You need to sign in first to reserve a book. Already have an account? ', link: {title: 'click here to sign in', anchor: '/login'}})
+        if (!authentication) {
+            dispatch(createNotification({title: 'You need to sign in first to reserve a book. Already have an account? ', link: {title: 'click here to sign in', anchor: '/login'}}))
             navigate('/signup')
             return
         }

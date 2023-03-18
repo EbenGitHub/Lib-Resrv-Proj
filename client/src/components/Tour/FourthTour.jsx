@@ -1,4 +1,15 @@
-const FourthTour = () => {
+import { useEffect } from "react"
+import { useSelector } from "react-redux"
+
+const FourthTour = ({setTourNum, tourNum}) => {
+    const doesUserClicked = useSelector(state => state.tourguid.bClicked)
+
+    useEffect(() => {
+        if (doesUserClicked) {
+            setTourNum(tourNum + 1)
+        }
+    }, [doesUserClicked]) //eslint-disable-line
+    
     return (
         <>
             <p>

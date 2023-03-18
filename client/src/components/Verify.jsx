@@ -5,8 +5,8 @@ import Success from './Status/Success';
 import { useNavigate } from 'react-router-dom';
 import { usePin } from '../hooks/usePin';
 
-const Verify = ({setNot, form, setIsUserNew}) => {
-    let {stt, reSend, dis, setInp, inp} = usePin({setNot, form, setIsUserNew})
+const Verify = ({form}) => {
+    let {stt, reSend, dis, setInp, inp} = usePin({form})
     const navigate = useNavigate()
 
     if (!form.email) return navigate('/signup')

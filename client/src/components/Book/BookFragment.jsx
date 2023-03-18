@@ -4,15 +4,15 @@ import { reservedTag, availableTag, unavailableTag } from '../../utils/theme';
 import icon from '../../assets/book-solid.svg'
 import { Link } from 'react-router-dom';
 
-const BookFragment = ({book, setNot, token}) => {
+const BookFragment = ({book}) => {
     
-    const reserveButton = useReserve(setNot, token)
-    const releaseButton = useRelease(setNot, token)
+    const reserveButton = useReserve()
+    const releaseButton = useRelease()
 
     return (<div key={book.id} className=" relative bg-white m-2 w-4/5 p-5 rounded drop-shadow">
     <div className='flex justify-between items-center md:items-stretch flex-col md:flex-row'>
         <Link to={`/books/${book.id}`} className=' flex md:w-2/6 w-5/6 bg-gray-50 rounded-full'>
-            <div className='w-auto px-2 bg-gray-200 h-20 rounded drop-shadow hidden md:block'><p className='text-black text-center'>ላyብRaሪ</p> <img src={icon} className='w-9 h-9 m-1 text-white ml-5' /></div>
+            <div className='w-auto px-2 bg-gray-200 h-20 rounded drop-shadow hidden md:block'><p className='text-black text-center'>ላyብRaሪ</p> <img src={icon} className='w-9 h-9 m-1 text-white ml-5' alt=''/></div>
             <div className='relative overflow-hidden'>
                 <h3 className='pt-3 md:mb-0 mb-3 ml-4 font-[700] text-xl'>{book.title}</h3>
             </div>

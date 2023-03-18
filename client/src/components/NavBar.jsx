@@ -4,9 +4,11 @@ import { useState } from 'react';
 import { useSignout } from '../hooks/useSignout';
 import NavButton from './Nav/NavButton';
 import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
-const NavBar = ({token, setToken, setNot}) => {
-  const signout = useSignout(setNot, setToken)
+const NavBar = () => {
+  const authentication = useSelector(state => state.authentication)
+  const signout = useSignout()
   const [vis, setVis] = useState('0')
 
   let oldScrollY = 0;
@@ -29,7 +31,7 @@ useEffect(() => {
     return () => {
         window.removeEventListener('scroll', controlDirection);
     };
-},[window]);
+},[window]) // eslint-disable-line
 
     if (direction === 'down') return <nav className="z-20 p-3 m-2 rounded-full bg-gray-100 fixed"><img src={logo} className="h-6 sm:h-10" alt="Library Logo" onClick={() => setDirection('up')} /></nav>
 
@@ -48,7 +50,7 @@ useEffect(() => {
             <NavButton setVis={setVis} link='/' name='Home' />
             <NavButton setVis={setVis} link='/books' name='Books' />
             {
-              !token ? <>
+              !authentication ? <>
                           <NavButton setVis={setVis} link='/login' name='Login' />
                           <NavButton setVis={setVis} link='/signup' name='Signup' />
                       </> : <>

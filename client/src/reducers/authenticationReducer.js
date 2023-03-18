@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit'
-import * as uuid from 'uuid'
 
 const initialState = null
 

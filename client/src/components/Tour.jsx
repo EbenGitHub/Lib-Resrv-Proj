@@ -12,16 +12,21 @@ import FinalTour from "./Tour/FinalTour";
 import NextButton from "./Tour/NextButton";
 import Expore from "./Tour/Explore";
 import TryReserve from "./Tour/TryReserve";
+import { useDispatch, useSelector } from "react-redux";
+import { unguidUser } from "../reducers/tourguidReducer";
 
-const Tour = ({token, setIsUserNew}) => {
+const Tour = () => {
+    const dispatch = useDispatch()
+    const authentication = useSelector(state => state.authentication)
+
     const navigate = useNavigate()
     const [tourNum, setTourNum] = useState(1)
 
     useEffect(() => {
         if (tourNum === TOURS.length - 1) {
-            setIsUserNew(false)
+            dispatch(unguidUser())
         }
-    }, [tourNum])
+    }, [tourNum]) // eslint-disable-line
     
     const TOURS = [
      <WaitForLogIn />,
@@ -29,7 +34,7 @@ const Tour = ({token, setIsUserNew}) => {
      <Expore />,
      <SecondTour navigate={navigate} />,
      <ThirdTour />,
-     <FourthTour />,
+     <FourthTour setTourNum={setTourNum} tourNum={tourNum} />,
      <FifthTour />,
      <TryReserve />,
      <SixthTour navigate={navigate} />,
@@ -39,7 +44,7 @@ const Tour = ({token, setIsUserNew}) => {
 
     return <div className="bg-cyan-500 z-30 m-5 rounded-xl w-11/12 ml-9 border-2 border-cyan-900 drop-shadow-xl text-white font-[700] mt-20 p-5 fixed flex flex-row items-center justify-between">
         {
-            token ? <>
+            authentication ? <>
                         {
                             TOURS[tourNum]
                         } 

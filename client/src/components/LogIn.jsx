@@ -4,10 +4,28 @@ import { Link } from 'react-router-dom';
 import { useLogin } from '../hooks/useLogin';
 import { useNavigate } from 'react-router-dom';
 import { useShowHidPass } from '../hooks/useShowHidPass';
+import { useDispatch, useSelector } from 'react-redux';
+import { createNotification } from '../reducers/notificationReducer';
+import { useEffect, useState } from 'react';
 
-const LogIn = ({setNot, setToken, token}) => {
-    const login = useLogin({setNot, setToken})
+const LogIn = () => {
+    const dispatch = useDispatch()
+    const authentication = useSelector(state => state.authentication)
+
+    const [show, setShow] = useState(true)
+
+    const login = useLogin()
     const navigate = useNavigate()
+
+    useEffect(() => {
+      if (authentication && show) {
+        dispatch(createNotification({title: 'You are already logged in!', status: 'warning'}))
+        navigate('/books')
+        return
+      }
+      
+    }, [authentication]) //eslint-disable-line
+
     const [pass, Button] = useShowHidPass()
 
     const formik = useFormik({
@@ -16,6 +34,7 @@ const LogIn = ({setNot, setToken, token}) => {
           password: '',
         },
         onSubmit: function (values) {
+            setShow(false)
             login({
               variables: {
                 username: values.username,
@@ -34,12 +53,6 @@ const LogIn = ({setNot, setToken, token}) => {
           })
       })
 
-      if (token) {
-        setNot({title: 'You are already logged in!', status: 'warning'})
-        navigate('/books')
-        return
-      }
-    
       return (
         <div className="bg-blue-200 min-w-screen py-40 min-h-screen overflow-x-hidden">
           <form onSubmit={formik.handleSubmit} className="max-w-lg mx-auto bg-white rounded shadow-lg mt-7 p-3">

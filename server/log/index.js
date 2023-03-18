@@ -27,7 +27,7 @@ const hisMake = (d) => {
 
 const logger = (rawData) => {
     const data = hisMake(rawData)
-    Config.MODE !== "production" && console.log(data)
+    // Config.MODE !== "production" && console.log(data)
     fs.writeFile(path.join(__dirname, 'history.log'), '\n'+data, {flag: 'a+'}, (err) => console.log(err))
 }
 

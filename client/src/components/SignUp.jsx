@@ -4,8 +4,14 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useShowHidPass } from '../hooks/useShowHidPass';
 import passwordValidation from '../utils/validate';
- 
-const SignUp = ({setNot, token, setForm}) => {
+import { useDispatch, useSelector } from 'react-redux';
+import { createNotification } from '../reducers/notificationReducer';
+import { useEffect } from 'react';
+
+const SignUp = ({setForm}) => {
+    const dispatch = useDispatch()
+    const authentication = useSelector(state => state.authentication)
+
     const navigate = useNavigate()
     const [pass, ButtonPass] = useShowHidPass()
     const [passcnf, ButtonPassCnf] = useShowHidPass()
@@ -60,11 +66,13 @@ const SignUp = ({setNot, token, setForm}) => {
       })
 
           
-      if (token) {
-        setNot({title: 'You are already signed in!', status: 'warning'})
+     useEffect(() => {
+      if (authentication) {
+        dispatch(createNotification({title: 'You are already signed in!', status: 'warning'}))
         navigate('/books')
         return
       }
+     }, []) // eslint-disable-line
     
       return (
         <div className="bg-blue-200 min-w-screen py-40 min-h-screen overflow-x-hidden">

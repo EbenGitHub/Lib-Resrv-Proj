@@ -1,15 +1,8 @@
-import {ALL_BOOKS, ME} from '../gql/queries'
-import { MY_BOOKS } from '../gql/fragments';
-import {RESERVE_BOOK, RELEASE_BOOK} from '../gql/mutations'
+import {ALL_BOOKS} from '../gql/queries'
 import {BOOK_RESERVED, BOOK_RELEASED} from '../gql/subscriptions'
-import { useQuery, useMutation, useSubscription } from '@apollo/client';
-import icon from '../assets/book-solid.svg'
-import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useQuery, useSubscription } from '@apollo/client';
 import Loading from './Loading/Loading';
 import Error from './Error/Error';
-import { Link } from 'react-router-dom';
-import { gql } from '@apollo/client';
 import BookDetail from './Book/BookDetail';
 
 const Userid = localStorage.getItem('library-user-id')
@@ -18,10 +11,7 @@ const isItMe = (id) => {
     return Userid === id
 }
 
-const Books = ({token, setNot}) => {
-
-    const navigate = useNavigate()
-
+const Books = () => {
     const data = useQuery(ALL_BOOKS)
 
     useSubscription(BOOK_RESERVED, {
@@ -59,7 +49,7 @@ const Books = ({token, setNot}) => {
 
     const books = data.data && data.data.books ? data.data.books : []
 
-    return <BookDetail books={books} noHistory setNot={setNot} token={token} /> 
+    return <BookDetail books={books} noHistory /> 
 }
  
 export default Books;

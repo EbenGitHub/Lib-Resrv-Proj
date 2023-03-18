@@ -3,12 +3,16 @@ import { useSignup } from './useSignup';
 import sendEmail from '../utils/sendemail';
 import generatePin from '../utils/generatepin';
 import checkValid from '../utils/check';
+import { useDispatch } from 'react-redux';
+import { guidUser } from '../reducers/tourguidReducer';
+import { createNotification } from '../reducers/notificationReducer';
 
 let PRIVATE_PIN = null
 
-export const usePin = ({setNot, form, setIsUserNew}) => {
+export const usePin = ({form}) => {
+    const dispatch = useDispatch()
 
-    const signup = useSignup({setNot})
+    const signup = useSignup()
     const [inp, setInp] = useState('')
     const [dis, setDis] = useState(false)
     const [stt, setStt] = useState('waiting')
@@ -20,7 +24,7 @@ export const usePin = ({setNot, form, setIsUserNew}) => {
             setTimeout(() => {
                 if (checkValid(PRIVATE_PIN, inp)) {
                     setStt('success')
-                    setNot({title: "Verification is completed! Please wait white we create everything for you! It will be ready just in a moment!", status: 'success'})
+                    dispatch(createNotification({title: "Verification is completed! Please wait white we create everything for you! It will be ready just in a moment!", status: 'success'}))
                     signup({
                         variables: {
                           username: form.username,
@@ -29,9 +33,9 @@ export const usePin = ({setNot, form, setIsUserNew}) => {
                           profession: form.profession
                         }
                       })
-                    setIsUserNew(true)
+                    dispatch(guidUser())
             } else {
-                setNot({title: 'invalid PIN! Please input the pin number sent to your email account. If you do not find it, you can press resend.'})
+                dispatch(createNotification({title: 'invalid PIN! Please input the pin number sent to your email account. If you do not find it, you can press resend.'}))
                 setStt('failed')
                 setDis(false)
                 setInp('')
@@ -48,7 +52,13 @@ export const usePin = ({setNot, form, setIsUserNew}) => {
         PRIVATE_PIN = generatePin()
         console.log(PRIVATE_PIN)
         setStt('waiting')
-        sendEmail({name: form.username, email: form.email, pin: PRIVATE_PIN}, setNot)
+        sendEmail({name: form.username, email: form.email, pin: PRIVATE_PIN})
+        .then(() => {
+            dispatch(createNotification({title: `Hi ${form.username}👋.Verification pin was sent to ${form.email}. Please check your email.`, status: 'success'}))
+        })
+        .catch((e) => {
+            dispatch(createNotification({title: `Error happend while sending email message. Are you sure ${form.email} is your email address? ${e.text}`, status: 'danger'}))
+        })
     }
 
     return {stt, reSend, dis, setInp, inp}
