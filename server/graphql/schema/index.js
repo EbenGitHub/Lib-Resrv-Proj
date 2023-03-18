@@ -9,7 +9,8 @@ const typeDefs = `
   }
   
   type Status {
-    state: String!
+    health: String!
+    version: String!
     mode: String!
   }
 

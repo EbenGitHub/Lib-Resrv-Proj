@@ -29,86 +29,95 @@ const fun = async () => {
 
         const hashedPassword = await bcrypt.hash('password', saltRounds)
 
-        const user1 = new User({
-            username: "ebenezer esh",
-            email: "ebe.goo@gmail.com",
-            hashedPassword: hashedPassword
-        })
-        const user2 = new User({
-            username: "samuel mat",
-            email: "sam.m@gmail.com",
-            hashedPassword: hashedPassword
-        })
+        const users = [
+            {
+                username: "ebenezer esh",
+                email: "ebe.goo@gmail.com",
+                hashedPassword: hashedPassword
+            },
+            {
+                username: "abenezer esh 2",
+                email: "ebe.goo@gmail.com",
+                hashedPassword: hashedPassword
+            },
+            {
+                username: "samuel mat",
+                email: "sam.m@gmail.com",
+                hashedPassword: hashedPassword
+            }
 
-        await user1.save()
-        await user2.save()
+        ]
 
-        const book1 = new Book({
-            title: "Get started with JS.",
-            reserved: false,
-            author: "Math Neglson",
-        })
-        
-        const book2 = new Book({
-            title: "Python is easy",
-            reserved: false,
-            author: "Nail Will",
-        })
-        const book3 = new Book({
-            title: "why you need to be a programmer",
-            reserved: false,
-            author: "Nail Will",
-        })
-        const book4 = new Book({
-            title: "ChatGPT and its impact",
-            reserved: false,
-            author: "Nail Will",
-        })
-        const book5 = new Book({
-            title: "Learn full React course",
-            reserved: false,
-            author: "Nail Will",
-        })
-        const book6 = new Book({
-            title: "Top 10 leading technologies",
-            reserved: false,
-            author: "Nail Will",
-        })
-        const book7 = new Book({
-            title: "You need to know this",
-            reserved: false,
-            author: "Nail Will",
-        })
+        const books = [
+            {
+                title: "Get started with JS.",
+                reserved: false,
+                author: "Math Neglson",
+            },
+            {
+                title: "Python is easy",
+                reserved: false,
+                author: "Nail Will",
+            },
+            {
+                title: "why you need to be a programmer",
+                reserved: false,
+                author: "Nail Will",
+            },
+            {
+                title: "ChatGPT and its impact",
+                reserved: false,
+                author: "Nail Will",
+            },
+            {
+                title: "Learn full React course",
+                reserved: false,
+                author: "Nail Will",
+            },
+            {
+                title: "Top 10 leading technologies",
+                reserved: false,
+                author: "Nail Will",
+            },
+            {
+                title: "You need to know this",
+                reserved: false,
+                author: "Nail Will",
+            }
+        ]
 
-        await book1.save()
-        await book2.save()
-        await book3.save()
-        await book4.save()
-        await book5.save()
-        await book6.save()
-        await book7.save()
+        const usersModel = users.map(u => new User(u))
+        const usersPromise = usersModel.map(u => u.save())
+        await Promise.all(usersPromise)
+
+        const booksModel = books.map(b => new Book(b))
+        const booksPromise = booksModel.map(b => b.save())
+        await Promise.all(booksPromise)
 
         // reserve one book
         const date = new Date()
         const resId = uuid.v4()
 
-        book2.reservedBy = user1
-        book2.reserved = true
-        book2.reservedDate = date
+        const book = await Book.findOne({title: books[0].title})
+        const user = await User.findOne({username: users[0].username})
+
+        book.reservedBy = user
+        book.reserved = true
+        book.reservedDate = date
 
         const newHistory = {
-            reserverUser: user1.id,
+            reserverUser: user.id,
             reservationDate: date.toString(),
             releaseDate: '',
             Id: resId
         }
 
-        book2.reservationHistory = book2.reservationHistory.concat(JSON.stringify(newHistory))
-        user1.reservedBooks = user1.reservedBooks.concat(book2)
-        user1.reservationId = resId
+        book.reservationHistory = book.reservationHistory.concat(JSON.stringify(newHistory))
+        user.reservedBooks = user.reservedBooks.concat(book)
+        user.reservationId = resId
 
-        await user1.save()
-        await book2.save()
+        await  book.save()
+        await user.save()
 
         console.log('seeding was successful')
         mongoose.connection.close()

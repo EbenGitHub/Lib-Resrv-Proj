@@ -19,7 +19,7 @@ const BookDetail = ({noHistory, me, books, book, setNot, token}) => {
                                 {
                                     !books.length ? <p className='bg-gray-50 rounded-full p-4 my-3 drop-shadow'>You have no reservation history.</p> : 
                                     books.map(b => {
-                                        return <BookHistory book={b} />
+                                        return <BookHistory book={b} key={b.id} />
                                     })
                                 }
                             </ul>

@@ -12,7 +12,7 @@ export const useSignup = ({setNot}) => {
         if (RegExp(/to be unique/i).test(error.graphQLErrors[0].extensions.reason)) {
             setNot({title: "USER ALREADY EXIST!!!", link: {title: 'PLEASE LOG IN TO YOUR ACCOUNT.', anchor: './login'}})
         } else {
-        setNot({title: error.graphQLErrors[0].extensions.reason.toUpperCase(), link: {title: 'Already have an account ? Login', anchor: './login'}})
+        setNot({title: error.graphQLErrors[0].extensions.reason?.toUpperCase(), link: {title: 'Already have an account ? Login', anchor: './login'}})
         }
         }
     })

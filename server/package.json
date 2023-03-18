@@ -6,9 +6,17 @@
   "scripts": {
     "test": "cross-env NODE_ENV=test jest .",
     "dev": "cross-env NODE_ENV=development nodemon index.js",
+    "dev:local": "cross-env DB_STATUS=local NODE_ENV=development nodemon index.js",
+    "dev:online": "cross-env DB_STATUS=online NODE_ENV=development nodemon index.js",
     "start": "cross-env NODE_ENV=production node index.js",
+    "start:local": "cross-env DB_STATUS=local NODE_ENV=production node index.js",
+    "start:online": "cross-env DB_STATUS=online NODE_ENV=production node index.js",
     "seed": "cross-env NODE_ENV=development node seed.js",
+    "seed:local": "cross-env DB_STATUS=local NODE_ENV=development node seed.js",
+    "seed:online": "cross-env DB_STATUS=online NODE_ENV=development node seed.js",
     "seed:prod": "cross-env NODE_ENV=production node seed.js",
+    "seed:prod-loc": "cross-env DB_STATUS=local NODE_ENV=production node seed.js",
+    "seed:prod-onl": "cross-env DB_STATUS=online NODE_ENV=production node seed.js",
     "upg": "ncu --upgrade"
   },
   "husky": {

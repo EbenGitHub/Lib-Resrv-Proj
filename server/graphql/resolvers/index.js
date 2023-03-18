@@ -5,6 +5,7 @@ const User = require('../../models/user')
 const bcrypt = require('bcrypt')
 const uuid = require("uuid")
 const Config = require("../../config")
+const logger = require('../../log/index.js')
 const { PubSub } = require('graphql-subscriptions')
 const pubsub = new PubSub()
 
@@ -78,6 +79,7 @@ const reserve = async (book, currUser) => {
   book.reservationHistory = book.reservationHistory.concat(JSON.stringify(newHistory))
   currUser.reservedBooks = currUser.reservedBooks.concat(book)
   currUser.reservationId = resId
+  logger({action: 'rs', user: currUser.username, userId: currUser._id.toString(), book: book.title, bookId: book._id.toString()})
 } 
 
 const release = (book, currUser) => {
@@ -91,6 +93,7 @@ const release = (book, currUser) => {
   })
   book.reservationHistory = history
   currUser.reservedBooks = currUser.reservedBooks.filter(b => b.toString() !== book.id)
+  logger({action: 'rl', user: currUser.username, userId: currUser._id.toString(), book: book.title, bookId: book._id.toString()})
 } 
 
 const check = (book, currUser, state = 'res') => {
@@ -128,6 +131,7 @@ const resolvers = {
         try {
           book = await Book.findById(args.id)
         } catch(e) {
+          logger({action: 'e', user: currUser?.username, userId: currUser?.id, userAction: 'get request to book', error: e})
           throw new GraphQLError('Finding book failed', {
             extensions: {
               code: 'BAD_USER_INPUT',
@@ -141,7 +145,7 @@ const resolvers = {
       },
       users: async () => User.find({}).populate('reservedBooks'),
       me: (_root, _args, {currUser}) => currUser ? currUser.populate('reservedBooks') : null,
-      status: () => ({state: 'ok', mode: Config.MODE})
+      status: () => ({health: 'ok', mode: Config.MODE, version: Config.VERSION})
     },
     User: {
       reservedBookCounts: (root) => root.reservedBooks.length
@@ -193,21 +197,24 @@ const resolvers = {
         try {
           await user.save()
         } catch (error) {
+          logger({action: 'e', user: username, userId: 'nill', userAction: 'trying to sign up', error: error.errors.username?.message})
           throw new GraphQLError('Saving user failed', {
             extensions: {
               code: 'BAD_USER_INPUT',
               invalidArgs: args.username,
-              reason: error.errors.username.message,
+              reason: error.errors.username?.message,
               error
             }
           })
         }
+        logger({action: 'c', user: user.username, userId: user._id.toString()})
               
         return user
       },
       login: async (_root, args) => {
         let user = await User.findOne({username: args.username})
           if (!user) {
+            logger({action: 'e', user: args.username, userId: 'nill', userAction: 'trying to log in', error: 'user not found'})
             throw new GraphQLError('Unauthorized user', {
               extensions: {
                 code: 'BAD_USER_INPUT',
@@ -219,6 +226,7 @@ const resolvers = {
           const isAuth = await bcrypt.compare(args.password, user.hashedPassword)
               
           if (!isAuth) {
+            logger({action: 'e', user: args.username, userId: 'nill', userAction: 'trying to log in', error: 'invalid password'})
             throw new GraphQLError('Unauthorized user', {
               extensions: {
                 code: 'BAD_USER_INPUT',
@@ -233,11 +241,13 @@ const resolvers = {
           }
               
           let encToken = jwt.sign(userToken, process.env.JWT_SECRET, {expiresIn: process.env.JWT_EXP_TIME})
+          logger({action: 'l', user: user.username, userId: user._id.toString()})
           return { value: encToken, id: user._id.toString() }
       },
       reserveBook: async (_root, args, {currUser}) => {
 
         if (!currUser) {
+          logger({action: 'ig', body: 'an unautheticated user tried to reserve'})
           throw new GraphQLError('not authenticated', {
             extensions: {
               code: 'BAD_USER_INPUT',
@@ -250,6 +260,7 @@ const resolvers = {
             book = await Book.findById(args.id)
             if (!book) throw new Error('book not found')
         } catch(e) {
+          logger({action: 'e', user: currUser?.username, userId: currUser?.id, userAction: 'user tried to reserve a book that does not exist', error: e})
           throw new GraphQLError('Finding Book failed', {
             extensions: {
               code: 'BAD_USER_INPUT',
@@ -267,6 +278,7 @@ const resolvers = {
           await book.save()
           await currUser.save()
         } catch(e) {
+          logger({action: 'e', user: currUser?.username, userId: currUser?.id, userAction: `user trying to reserve a book failed bookID ${book._id.toString()} ${book.title}`, error: e})
             throw new GraphQLError('Reserving a Book failed', {
               extensions: {
               code: 'BAD_USER_INPUT',
@@ -278,12 +290,14 @@ const resolvers = {
 
         const bookToReturn = await book.populate('reservedBy')
         pubsub.publish('BOOK_RESERVED', { bookReserved: bookToReturn })
+        logger({action: 'rs', user: currUser.username, userId: currUser._id.toString(), book: bookToReturn.title, bookId: bookToReturn._id.toString()})
         return bookToReturn
 
       },
       releaseBook: async (_root, args, {currUser}) => {
 
         if (!currUser) {
+          logger({action: 'ig', body: 'an unautheticated user tried to reserve'})
           throw new GraphQLError('not authenticated', {
             extensions: {
               code: 'BAD_USER_INPUT',
@@ -296,6 +310,7 @@ const resolvers = {
             book = await Book.findById(args.id)
             if (!book) throw new Error('book not found')
         } catch(e) {
+          logger({action: 'e', user: currUser?.username, userId: currUser?.id, userAction: 'user tried to reserve a book that does not exist', error: e})
           throw new GraphQLError('Finding Book failed', {
             extensions: {
               code: 'BAD_USER_INPUT',
@@ -313,6 +328,7 @@ const resolvers = {
           await book.save()
           await currUser.save()
         } catch(e) {
+            logger({action: 'e', user: currUser?.username, userId: currUser?.id, userAction: `user trying to release a book failed bookID ${book._id.toString()} ${book.title}`, error: e})
             throw new GraphQLError('Releasing the Book failed', {
               extensions: {
               code: 'BAD_USER_INPUT',
@@ -324,6 +340,7 @@ const resolvers = {
 
         const bookToReturn = await book.populate('reservedBy')
         pubsub.publish('BOOK_RELEASED', { bookReleased: bookToReturn })
+        logger({action: 'rl', user: currUser.username, userId: currUser._id.toString(), book: bookToReturn.title, bookId: bookToReturn._id.toString()})
         return bookToReturn
       }
     },

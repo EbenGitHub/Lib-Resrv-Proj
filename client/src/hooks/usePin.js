@@ -6,7 +6,7 @@ import checkValid from '../utils/check';
 
 let PRIVATE_PIN = null
 
-export const usePin = ({setNot, form}) => {
+export const usePin = ({setNot, form, setIsUserNew}) => {
 
     const signup = useSignup({setNot})
     const [inp, setInp] = useState('')
@@ -29,6 +29,7 @@ export const usePin = ({setNot, form}) => {
                           profession: form.profession
                         }
                       })
+                    setIsUserNew(true)
             } else {
                 setNot({title: 'invalid PIN! Please input the pin number sent to your email account. If you do not find it, you can press resend.'})
                 setStt('failed')
@@ -45,6 +46,7 @@ export const usePin = ({setNot, form}) => {
     
     const reSend = () => {
         PRIVATE_PIN = generatePin()
+        console.log(PRIVATE_PIN)
         setStt('waiting')
         sendEmail({name: form.username, email: form.email, pin: PRIVATE_PIN}, setNot)
     }

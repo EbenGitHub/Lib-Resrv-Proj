@@ -14,12 +14,14 @@ import Notify from './components/Notify'
 import Footer from './components/Footer'
 import ErrorRoutes from './components/Error/ErrorRoute'
 import Verify from './components/Verify'
+import Tour from './components/Tour'
 
 
 const App = () => {
   const [token, setToken] = useState(null)
   const [notify, setNotify] = useState([])
   const [form, setForm] = useState({})
+  const [isUserNew, setIsUserNew] = useState(false)
 
   useEffect(() => {
     const tk = localStorage.getItem('library-user-token')
@@ -43,6 +45,9 @@ const App = () => {
       <div>
         <NavBar token={token} setToken={setToken} setNot={setNot}/>
         <Notify notify={notify} deleNot={deleNot}/>
+        {
+          isUserNew ? <Tour token={token} setIsUserNew={setIsUserNew} /> : null
+        }
         <Routes>
           <Route path='/signup' element={<SignUp setNot={setNot} token={token} setForm={setForm}/>} />
           <Route path='/login' element={<LogIn setToken={setToken} setNot={setNot} token={token}/>} />
@@ -51,7 +56,7 @@ const App = () => {
           <Route path='/books/:id' element={<Book setNot={setNot} token={token}/>} />
           <Route path='/reservations' element={<MyReservations setNot={setNot} token={token}/>} />
           {
-            form.email ? <Route path='/verify' element={<Verify setNot={setNot} form={form} />} /> : null
+            form.email ? <Route path='/verify' element={<Verify setNot={setNot} form={form} setIsUserNew={setIsUserNew} />} /> : null
           }
           <Route path='*' element={<ErrorRoutes />} />
         </Routes>

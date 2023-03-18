@@ -46,6 +46,7 @@ I did usability study on three people and after improving based on the feedbacks
 * kubernetes
 * huskey
 * prettier
+* emailjs
 
 ####
 
@@ -67,6 +68,7 @@ Got to this [url link](https://library-31bw.onrender.com/). Sign up. And start r
 If you prefer to install it locally and test it out for yourself..
 
 ##### Using GitHub Codes
+> First Make sure you have node version `16.19.0` or latest. The application is made with `19.8.1`, and if you use node version older than `16.19.0`, It will not work
 > Pull the github repository
 ####
 ```bash
