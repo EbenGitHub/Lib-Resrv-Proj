@@ -1,7 +1,7 @@
 // require('dotenv').config()
 
 // Status of the Backend ['local', 'online']
-const STATUS='local'
+const STATUS='online'
 
 //  Backend url for local
 const BACKEND_URL_LOC = 'http://localhost:4000'
