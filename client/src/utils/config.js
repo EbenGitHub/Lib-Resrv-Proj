@@ -1,18 +1,18 @@
 // Emailjs Service Variables
-export const EMAIL_SERVICE_ID = 'service_lcp53nu'
-export const EMAIL_TEMPLATE_ID = 'template_1gumj1e'
-export const PUBLIC_API_KEY = 'Bgn7EOGkCKW87zLNw'
+export const EMAIL_SERVICE_ID = '(PUT_SERVICE_ID)'
+export const EMAIL_TEMPLATE_ID = '(PUT_TEMPLATE_ID)'
+export const PUBLIC_API_KEY = '(PUT_PUBLIC_API_KEY)'
 
 // Status of the Backend ['local', 'online']
-const STATUS='online'
+const STATUS='(PUT_STATUS)'
 
 //  Backend url for local
-const BACKEND_URL_LOC = 'http://localhost:4000'
-const WS_URL_LOC = 'ws://localhost:4000'
+const BACKEND_URL_LOC = '(PUT_LOC_GQL_URL)'
+const WS_URL_LOC = '(PUT_LOC_WS_URL)'
 
 //  Backend url for cloud
-const BACKEND_URL_ONL = 'https://library-31bw.onrender.com'
-const WS_URL_ONL = 'wss://library-31bw.onrender.com'
+const BACKEND_URL_ONL = '(PUT_ONL_GQL_URL)'
+const WS_URL_ONL = '(PUT_ONL_WS_URL)'
 
 const status = process.env.STATUS || STATUS
 

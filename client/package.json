@@ -32,6 +32,13 @@
     "serve": "serve -s build",
     "test": "react-scripts test",
     "deploy": "cross-env npm run build && rm ../server/build/ -rf && cp build/ ../server/ -rp",
+    "config": "cross-env npm run _serv_id && npm run _temp_id && npm run _api_key && npm run _status && npm run _gql_url && npm run _ws_url",
+    "_serv_id": "cross-env sed -i s/\\(PUT_SERVICE_ID\\)/$EMAIL_SERVICE_ID/ ./src/utils/config.js",
+    "_temp_id": "cross-env sed -i s/\\(PUT_TEMPLATE_ID\\)/$EMAIL_TEMPLATE_ID/ ./src/utils/config.js",
+    "_api_key": "cross-env sed -i s/\\(PUT_PUBLIC_API_KEY\\)/$PUBLIC_API_KEY/ ./src/utils/config.js",
+    "_status": "cross-env sed -i s/\\(PUT_STATUS\\)/$STATUS/ ./src/utils/config.js",
+    "_gql_url": "cross-env sed -i s/\\(PUT_ONL_GQL_URL\\)/$BACKEND_URL_ONL/ ./src/utils/config.js",
+    "_ws_url": "cross-env sed -i s/\\(PUT_ONL_WS_URL\\)/$WS_URL_ONL/ ./src/utils/config.js",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
