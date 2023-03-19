@@ -142,7 +142,7 @@ cd ../client
 ####
 
 ## Live DEMO and URL
-Coming soon. [url link](https://library-31bw.onrender.com/)
+[video link](https://drive.google.com/file/d/1NzNduyGfg1oSfIRobxS6WMdE0Vlf8o5v/view?usp=sharing)
 ####
 
 ## Developer and License
