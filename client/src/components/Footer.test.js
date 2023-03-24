@@ -6,9 +6,15 @@ import Footer from './Footer'
 describe('<Footer />', () => {
     
   test('footer is rendered', () => {
-    render(<Footer />)
+    beforeAll(() => {
+      render(<Footer />) //eslint-disable-this
+    })
 
-    let element = screen.getByText('© Copyright reserverd with MIT License. ALX-Holberton 2023. Ebenezer Eshetie.')
-    expect(element).toBeDefined()
+    
+    let elementOne = screen.getByText('Copyright reserverd with MIT License')
+    let elementTwo = screen.getByText('ALX-Holberton 2023. Ebenezer Eshetie.')
+    screen.debug(elementOne, elementTwo)
+    expect(elementOne).toBeDefined()
+    expect(elementTwo).toBeDefined()
   })
 })
