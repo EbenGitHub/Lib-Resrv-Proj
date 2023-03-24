@@ -45,7 +45,8 @@ const splitLink = split(
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
-  link: splitLink
+  link: splitLink,
+  connectToDevTools: true
 })
 
 ReactDOM.createRoot(document.getElementById('root')).render(
