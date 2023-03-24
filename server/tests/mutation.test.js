@@ -4,11 +4,15 @@ const resolvers = require('../graphql/resolvers/index')
 const Config = require("../config")
 const mongoose = require('mongoose')
 const User = require('../models/user')
+const fun = require('../seed')
 
 let GlobalDataBase = {testServer: null, token: null}
 
 describe("mutation test", () => {
     beforeAll(async () => {
+      
+      await fun()
+
       mongoose.set('strictQuery', false)
 
       require('dotenv').config()

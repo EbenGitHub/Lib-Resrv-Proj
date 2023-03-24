@@ -123,6 +123,7 @@ const fun = async () => {
         mongoose.connection.close()
     } catch(e) {
         console.log('error connection to MongoDB:', e.message)
+        mongoose.connection.close()
     }
 }
 
@@ -137,3 +138,5 @@ rl.question("This will delete all your documents in your database! Are you sure 
   
     rl.close();
 });
+
+module.exports = fun

@@ -3,11 +3,15 @@ const typeDefs = require('../graphql/schema/index')
 const resolvers = require('../graphql/resolvers/index')
 const Config = require("../config")
 const mongoose = require('mongoose')
+const fun = require('../seed')
 
 let GlobalDataBase = {testServer: null}
 
 describe("query test", () => {
     beforeAll(async () => {
+      
+      await fun()
+      
       mongoose.set('strictQuery', false)
 
       require('dotenv').config()
