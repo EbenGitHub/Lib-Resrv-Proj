@@ -2,8 +2,8 @@ import { gql } from "@apollo/client";
 import { BOOKS, ME_FRAG, MY_BOOKS } from "./fragments";
 
 export const ALL_BOOKS = gql`
-query {
-    books {
+query($title: String) {
+    books(title: $title) {
         ...Books
     }
 }

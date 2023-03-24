@@ -10,6 +10,14 @@ POST https://library-31bw.onrender.com
 Content-Type: application/json
 
 {
+    "query" : "query { books { title reserved author reservedDate reservedBy { id } reservationHistory available expired { isExpired } } }"
+}
+
+###
+POST https://library-31bw.onrender.com
+Content-Type: application/json
+
+{
     "query" : "query { status { health mode version } }"
 }
 

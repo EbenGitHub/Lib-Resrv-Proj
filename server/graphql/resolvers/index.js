@@ -118,7 +118,7 @@ const resolvers = {
           response = response.concat(book) 
         } 
         if (args.title) {
-            const book = await Book.find({ title : { $regex:  RegExp(args.title), $options: 'i' } })
+            const book = await Book.find({ title : { $regex:  RegExp(args.title), $options: 'i' } }).populate('reservedBy')
             response = response.concat(book)
         }
         if (!args.catagory && !args.title) {

@@ -17,6 +17,7 @@
     "seed:prod": "cross-env NODE_ENV=production node seed.js",
     "seed:prod-loc": "cross-env DB_STATUS=local NODE_ENV=production node seed.js",
     "seed:prod-onl": "cross-env DB_STATUS=online NODE_ENV=production node seed.js",
+    "seed:test": "cross-env DB_STATUS=online NODE_ENV=test node seed.js",
     "upg": "ncu --upgrade"
   },
   "husky": {
@@ -46,6 +47,7 @@
     "mongoose-unique-validator": "^3.1.0",
     "nodemon": "^2.0.20",
     "npm-check-updates": "^16.7.12",
+    "supertest": "^6.3.3",
     "uuid": "^9.0.0",
     "ws": "^8.12.1"
   },

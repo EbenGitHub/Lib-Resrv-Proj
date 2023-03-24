@@ -4,11 +4,12 @@ export const EMAIL_TEMPLATE_ID = '(PUT_TEMPLATE_ID)'
 export const PUBLIC_API_KEY = '(PUT_PUBLIC_API_KEY)'
 
 // Status of the Backend ['local', 'online']
-const STATUS='(PUT_STATUS)'
+// const STATUS='(PUT_STATUS)'
+const STATUS='local'
 
 //  Backend url for local
-const BACKEND_URL_LOC = '(PUT_LOC_GQL_URL)'
-const WS_URL_LOC = '(PUT_LOC_WS_URL)'
+const BACKEND_URL_LOC = 'http://localhost:4000'
+const WS_URL_LOC = 'ws://localhost:4000'
 
 //  Backend url for cloud
 const BACKEND_URL_ONL = '(PUT_ONL_GQL_URL)'
