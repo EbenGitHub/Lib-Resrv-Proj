@@ -142,7 +142,7 @@ cd ../client
 ####
 
 ## Live DEMO and URL
-[video link](https://drive.google.com/file/d/1NzNduyGfg1oSfIRobxS6WMdE0Vlf8o5v/view?usp=sharing)
+[video link](https://www.veed.io/view/374e7a27-cf73-4ede-b443-147286e3f8ba?panel=share)
 ####
 
 ## Developer and License
