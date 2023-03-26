@@ -4,6 +4,44 @@ const uuid = require("uuid")
 const User = require('../models/user')
 const Book = require('../models/book')
 
+const books = [
+  {
+      title: "Get started with JS.",
+      reserved: false,
+      author: "Math Neglson",
+  },
+  {
+      title: "Python is easy",
+      reserved: false,
+      author: "Nail Will",
+  },
+  {
+      title: "why you need to be a programmer",
+      reserved: false,
+      author: "Nail Will",
+  },
+  {
+      title: "ChatGPT and its impact",
+      reserved: false,
+      author: "Nail Will",
+  },
+  {
+      title: "Learn full React course",
+      reserved: false,
+      author: "Nail Will",
+  },
+  {
+      title: "Top 10 leading technologies",
+      reserved: false,
+      author: "Nail Will",
+  },
+  {
+      title: "You need to know this",
+      reserved: false,
+      author: "Nail Will",
+  }
+]
+
 const RESERVE_BOOK = `mutation($id: ID!) {
     reserveBook(id: $id) {
       id
@@ -77,6 +115,17 @@ const startDB = async () => {
       }
 }
 
+const resetDB = async () => {
+      await Book.deleteMany()
+
+      const bookPromises = books.map(b => {
+        const bModel = new Book(b)
+        return bModel.save()
+      })
+
+      await Promise.all(bookPromises)
+}
+
 const reserveForUser = async ({bookId, userId}) => {
     const date = new Date()
     const resId = uuid.v4()
@@ -99,9 +148,31 @@ const reserveForUser = async ({bookId, userId}) => {
     user.reservedBooks = user.reservedBooks.concat(book)
     user.reservationId = resId
 
-    await  book.save()
-    await user.save()
+    await Promise.all([ book.save(), user.save()])
 }
 
-const helper = {RESERVE_BOOK, RELEASE_BOOK, CREATE_USER, LOG_IN, startDB, reserveForUser}
+const releaseForUser = async ({bookId, userId}) => {
+    const book = await Book.findById(bookId)
+    const user = await User.findById(userId).populate('reservedBooks')
+
+    book.reservedBy = null
+    book.reserved = false
+
+    user.reservedBooks = user.reservedBooks.filter(b => b._id.toString() !== book.id)
+    user.reservationId = null
+
+    await Promise.all([ book.save(), user.save()])
+}
+
+const helper = {
+      RESERVE_BOOK, 
+      RELEASE_BOOK, 
+      CREATE_USER, 
+      LOG_IN, 
+      startDB, 
+      reserveForUser,
+      releaseForUser,
+      resetDB
+    }
+
 module.exports = helper

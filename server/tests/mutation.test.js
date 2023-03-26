@@ -85,6 +85,12 @@ describe("mutation test", () => {
         });
         
         expect(response.body.singleResult.data.reserveBook).toBeDefined();
+        expect(response.body.singleResult.data.reserveBook.available).toBe(false);
+        expect(response.body.singleResult.data.reserveBook.reserved).toBe(true);
+        expect(response.body.singleResult.data.reserveBook.reservedBy.id).toBe(GlobalDataBase.user.id);
+        expect(response.body.singleResult.data.reserveBook.expired.isExpired).toBe(false);
+        expect(response.body.singleResult.data.reserveBook.expired.expiryDate).toBe(2);
+        expect(response.body.singleResult.data.reserveBook.expired.timeFormate).toBe("Days");
       }, 10000);
 
       test('unauthenticated user can not reserve a book', async () => {
