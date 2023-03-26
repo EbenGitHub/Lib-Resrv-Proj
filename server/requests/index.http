@@ -5,6 +5,10 @@ Content-Type: application/json
     "query" : "query { status { health mode version } }"
 }
 
+
+
+
+
 ###
 POST http://library-31bw.onrender.com
 Content-Type: application/json
@@ -12,6 +16,10 @@ Content-Type: application/json
 {
     "query" : "query { status { health mode version } }"
 }
+
+
+
+
 
 ###
 POST http://library-31bw.onrender.com
@@ -25,6 +33,10 @@ query {
         version
     }
 }
+
+
+
+
 
 ###
 POST https://library-31bw.onrender.com
@@ -50,14 +62,18 @@ query {
      } 
   }
 
+
+
+
+
 ###
 POST https://library-31bw.onrender.com
 Content-Type: application/json
 X-REQUEST-TYPE: GraphQL
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImViZW5lemVyIGVzaCIsImlkIjoiNjQxNTY2MmJlY2E3ODE2N2Q3NTU3NDU5IiwiaWF0IjoxNjc5ODA4NTQ3LCJleHAiOjE2ODA0MTMzNDd9.U2XhVEyxFqlctYa6tqKYO2-CQ5sdDPIbb9-8FL-FB_E
 
-mutation {
-    reserveBook(id: "6415662deca78167d755746b") {
+mutation ($id: ID!) {
+    reserveBook(id: $id) {
       id
     title
     reservedDate
@@ -75,14 +91,22 @@ mutation {
     }
   }
 
+  {
+    "id": "6415662deca78167d755746b"
+  }
+
+
+
+
+
 ###
 POST https://library-31bw.onrender.com
 Content-Type: application/json
 X-REQUEST-TYPE: GraphQL
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImViZW5lemVyIGVzaCIsImlkIjoiNjQxNTY2MmJlY2E3ODE2N2Q3NTU3NDU5IiwiaWF0IjoxNjc5ODA4NTQ3LCJleHAiOjE2ODA0MTMzNDd9.U2XhVEyxFqlctYa6tqKYO2-CQ5sdDPIbb9-8FL-FB_E
 
-mutation {
-    releaseBook(id: "6415662deca78167d755746b") {
+mutation ($id: ID!) {
+    releaseBook(id: $id) {
       id
     title
     reservedDate
@@ -100,12 +124,24 @@ mutation {
     }
   }
 
+  {
+    "id": "6415662deca78167d755746b"
+  }
+
+
+
+
 
 ###
 POST https://library-31bw.onrender.com
 Content-Type: application/json
 X-REQUEST-TYPE: GraphQL
 
-mutation { 
-    login(username: "ebenezer esh", password: "password") { value id } 
+mutation ($username: String!, $password: String!) { 
+    login(username: $username, password: $password) { value id } 
+    }
+
+    {
+      "username": "ebenezer esh",
+      "password": "password"
     }
