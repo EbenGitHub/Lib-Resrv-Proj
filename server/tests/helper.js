@@ -42,6 +42,8 @@ const books = [
   }
 ]
 
+const ME = `query { me { id username } }`
+
 const RESERVE_BOOK = `mutation($id: ID!) {
     reserveBook(id: $id) {
       id
@@ -167,7 +169,8 @@ const releaseForUser = async ({bookId, userId}) => {
 const helper = {
       RESERVE_BOOK, 
       RELEASE_BOOK, 
-      CREATE_USER, 
+      CREATE_USER,
+      ME, 
       LOG_IN, 
       startDB, 
       reserveForUser,

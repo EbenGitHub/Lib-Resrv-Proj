@@ -81,7 +81,7 @@ describe("mutation test", () => {
           }
         }, 
         {
-          contextValue: { currUser: GlobalDataBase.user },
+          contextValue: { currUser: await User.findById(GlobalDataBase.user.id) },
         });
         
         expect(response.body.singleResult.data.reserveBook).toBeDefined();
@@ -123,10 +123,13 @@ describe("mutation test", () => {
           }
         }, 
         {
-          contextValue: { currUser: GlobalDataBase.user },
+          contextValue: { currUser: await User.findById(GlobalDataBase.user.id) },
         });
   
         expect(response.body.singleResult.data.releaseBook).toBeDefined();
+        expect(response.body.singleResult.data.releaseBook.available).toBe(true);
+        expect(response.body.singleResult.data.releaseBook.reserved).toBe(false);
+        expect(response.body.singleResult.data.releaseBook.reservationHistory.length).not.toEqual(0);
       }, 10000);
   
       test('unauthenticated user can not release a book', async () => {
@@ -142,6 +145,51 @@ describe("mutation test", () => {
   
         expect(response.body.singleResult.data.releaseBook).toBe(null)
         expect(response.body.singleResult.errors[0].message).toBe('not authenticated')
+      }, 10000);
+  
+      test('one user can not release a book reserved by other user', async () => {
+        const response = await GlobalDataBase.testServer.executeOperation({
+          query: helper.RELEASE_BOOK,
+          variables: {
+            id: GlobalDataBase.bookId
+          }
+        }, 
+        {
+          contextValue: { currUser: await User.findOne({username: "love test"}) },
+        });
+  
+        expect(response.body.singleResult.data.releaseBook).toBe(null)
+      }, 10000);
+    }, 20000)
+
+    describe("ME query", () => {
+      test('me request for unauthenticated user is null', async () => {
+        const response = await GlobalDataBase.testServer.executeOperation({
+          query: helper.ME,
+          variables: {
+            id: GlobalDataBase.bookId
+          }
+        }, 
+        {
+          contextValue: { currUser: null },
+        });
+        
+        expect(response.body.singleResult.data.me).toBe(null)
+      }, 10000);
+  
+      test('me request for authenticated user is not null', async () => {
+        const response = await GlobalDataBase.testServer.executeOperation({
+          query: helper.ME,
+          variables: {
+            id: GlobalDataBase.bookId
+          }
+        }, 
+        {
+          contextValue: { currUser: await User.findById(GlobalDataBase.user.id) },
+        });
+        
+        expect(response.body.singleResult.data.me.id).toBeDefined()
+        expect(response.body.singleResult.data.me.username).toBeDefined()
       }, 10000);
     }, 20000)
     
