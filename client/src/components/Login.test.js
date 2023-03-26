@@ -1,25 +1,21 @@
 import '@testing-library/jest-dom/extend-expect'
-import { render, screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
-import React from 'react'
+import { screen } from '@testing-library/react'
 import LogIn from './LogIn'
+import { renderWithProviders } from '../utils/utils-for-tests'
 
 describe.only('<LogIn />', () => {
-  let mockHandler = jest.fn()
 
-  beforeEach(() => {
-    render(<LogIn />) //eslint-disable-line
+  test('Login form is rendered correctly', () => {
+    renderWithProviders(<LogIn />)
+
+    const linkElement = screen.getByText(/Sign in/i);
+    expect(linkElement).toBeInTheDocument();
+
+    const elementOne = screen.getByText(/Username/i);
+    const elementTwo = screen.getByText(/Password/i);
+
+    expect(elementOne).toBeInTheDocument();
+    expect(elementTwo).toBeInTheDocument();
   })
 
-  test('Login form is submitted with the right content', () => {
-    const user = userEvent
-
-    const userInput = screen.getAllByRole('textbox')
-    user.type(userInput[0], 'Jest is Here')
-    user.type(userInput[1], 'secretpass')
-
-    const submit = screen.getByText('Log In')
-
-    expect(submit).toBeDefined()
-  })
 })
