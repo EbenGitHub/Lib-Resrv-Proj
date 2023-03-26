@@ -3,15 +3,14 @@ const typeDefs = require('../graphql/schema/index')
 const resolvers = require('../graphql/resolvers/index')
 const Config = require("../config")
 const mongoose = require('mongoose')
-const fun = require('../seed')
 
 let GlobalDataBase = {testServer: null}
 
+jest.setTimeout(20 * 1000)
+
 describe("query test", () => {
     beforeAll(async () => {
-      
-      await fun()
-      
+            
       mongoose.set('strictQuery', false)
 
       require('dotenv').config()
@@ -47,14 +46,31 @@ describe("query test", () => {
 
       expect(response.body.singleResult.data?.books[0].title).toBe('Get started with JS.');
       expect(response.body.singleResult.data?.books[0].author).toBe('Math Neglson');
+      expect(response.body.singleResult.data?.books[0].available).toBe(false);
 
       expect(response.body.singleResult.data?.books[1].title).toBe('Python is easy');
       expect(response.body.singleResult.data?.books[1].author).toBe('Nail Will');
 
-      expect(response.body.singleResult.data?.books[3].title).toBe('You need to know this');
-      expect(response.body.singleResult.data?.books[3].author).toBe('Nail Will');
+      expect(response.body.singleResult.data?.books[2].title).toBe('Learn full React course');
+      expect(response.body.singleResult.data?.books[2].reserved).toBe(false);
+      expect(response.body.singleResult.data?.books[2].available).toBe(true);
+
+      expect(response.body.singleResult.data?.books[3].title).toBe('Top 10 leading technologies');
+      expect(response.body.singleResult.data?.books[3].reserved).toBe(false);
       expect(response.body.singleResult.data?.books[3].available).toBe(true);
-    });
+      expect(response.body.singleResult.data?.books[3].reservationHistory[0]).toBe("You need to login to see your reservation histories");
+
+      expect(response.body.singleResult.data?.books[4].title).toBe('You need to know this');
+      expect(response.body.singleResult.data?.books[4].reserved).toBe(false);
+      expect(response.body.singleResult.data?.books[4].available).toBe(true);
+
+      expect(response.body.singleResult.data?.books[5].title).toBe('why you need to be a programmer');
+      expect(response.body.singleResult.data?.books[5].expired).toBe(null);
+      expect(response.body.singleResult.data?.books[5].available).toBe(true);
+
+      expect(response.body.singleResult.data?.books[6].title).toBe('ChatGPT and its impact');
+      expect(response.body.singleResult.data?.books[6].author).toBe('Nail Will');
+    }, 20000);
 
     test('returns books with provided title', async () => {
       const response = await GlobalDataBase.testServer.executeOperation({
@@ -64,5 +80,6 @@ describe("query test", () => {
 
       expect(response.body.singleResult.data?.books).toHaveLength(1);
       expect(response.body.singleResult.data?.books[0].title).toBe('Learn full React course');
-    });
-}, 20000)
+    }, 20000);
+
+}, 40000)

@@ -4,7 +4,8 @@
   "description": "library backend ",
   "main": "index.js",
   "scripts": {
-    "test": "cross-env NODE_ENV=test jest .",
+    "test": "cross-env DB_STATUS=local NODE_ENV=test jest .",
+    "test:loc": "cross-env NODE_ENV=test jest .",
     "dev": "cross-env NODE_ENV=development nodemon index.js",
     "dev:local": "cross-env DB_STATUS=local NODE_ENV=development nodemon index.js",
     "dev:online": "cross-env DB_STATUS=online NODE_ENV=development nodemon index.js",
@@ -18,6 +19,7 @@
     "seed:prod-loc": "cross-env DB_STATUS=local NODE_ENV=production node seed.js",
     "seed:prod-onl": "cross-env DB_STATUS=online NODE_ENV=production node seed.js",
     "seed:test": "cross-env DB_STATUS=online NODE_ENV=test node seed.js",
+    "seed:test-loc": "cross-env DB_STATUS=local NODE_ENV=test node seed.js",
     "upg": "ncu --upgrade"
   },
   "husky": {
