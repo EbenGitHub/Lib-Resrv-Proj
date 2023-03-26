@@ -38,6 +38,39 @@ export function renderWithProviders(
   return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
 }
 
+export function renderAuthUserWithProviders(
+  ui,
+  {
+    preloadedState = {
+      authentication: 'token', 
+      notification: [
+        {title: "this is test Notification", status: "success", id: '1'}
+    ]
+  },
+    store = configureStore({
+      reducer: { 
+        authentication: authenticationReducer,
+        notification: notificationReducer,
+        tourguid: tourguidReducer
+     },
+      preloadedState,
+    }),
+    ...renderOptions
+  } = {}
+) {
+  function Wrapper({ children }) {
+    return <BrowserRouter>
+                <ApolloProvider client={client}>
+                    <Provider store={store}>
+                        {children}
+                    </Provider>
+                </ApolloProvider>
+            </BrowserRouter>;
+  }
+
+  return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
+}
+
 export const books = [
     {
         id: 1,

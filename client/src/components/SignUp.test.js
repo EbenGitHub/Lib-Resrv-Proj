@@ -4,7 +4,7 @@ import React from 'react'
 import SignUp from './SignUp'
 import { renderWithProviders } from '../utils/utils-for-tests'
 
-describe.only('<SignUp />', () => {
+describe('<SignUp />', () => {
 
   test('Signup form is rendered correctly', () => {
     renderWithProviders(<SignUp />)

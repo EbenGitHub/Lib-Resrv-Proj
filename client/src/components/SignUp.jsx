@@ -82,7 +82,7 @@ const SignUp = ({setForm}) => {
            
             <div className='mb-4'>
               <label htmlFor="username">Choose username</label>
-              <input type="text" name="username" id="username" 
+              <input type="text" name="username" id="username" placeholder='username'
                 className={`block w-full rounded border-2 py-1 px-2 ${formik.touched.username && formik.errors.username ? 'border-red-500' : 'border-gray-300'}`}
                 onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.username} />
               {formik.touched.username && formik.errors.username && (
@@ -92,7 +92,7 @@ const SignUp = ({setForm}) => {
            
             <div className='mb-4'>
               <label htmlFor="email">Input Email address</label>
-              <input type="email" name="email" id="email" 
+              <input type="email" name="email" id="email" placeholder='email' 
                 className={`block w-full rounded border-2 py-1 px-2 ${formik.touched.email && formik.errors.email ? 'border-red-500' : 'border-gray-300'}`}
                 onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.email} />
               {formik.touched.email && formik.errors.email && (
@@ -118,7 +118,7 @@ const SignUp = ({setForm}) => {
             <div className='mb-4'>
               <label htmlFor="password">Password</label>
               <div className='flex flex-row'>
-                <input type={pass} name="password" id="password"
+                <input type={pass} name="password" id="password" placeholder='password'
                   className={`block w-full rounded border-2 py-1 px-2 ${formik.touched.password && formik.errors.password ? 'border-red-500' : 'border-gray-300'}`}
                   onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.password} />
                   <ButtonPass />
@@ -131,7 +131,7 @@ const SignUp = ({setForm}) => {
             <div className='mb-4'>
               <label htmlFor="passwordcnf">Confirm Password</label>
               <div className='flex flex-row'>
-                <input type={passcnf} name="passwordcnf" id="passwordcnf"
+                <input type={passcnf} name="passwordcnf" id="passwordcnf" placeholder='confirm password'
                   className={`block w-full rounded border-2 py-1 px-2 ${formik.touched.passwordcnf && formik.errors.passwordcnf ? 'border-red-500' : 'border-gray-300'}`}
                   onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.passwordcnf} />
                   <ButtonPassCnf />
