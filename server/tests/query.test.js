@@ -3,6 +3,7 @@ const typeDefs = require('../graphql/schema/index')
 const resolvers = require('../graphql/resolvers/index')
 const mongoose = require('mongoose')
 const helper = require('./helper')
+const constants = require('./constants')
 
 let GlobalDataBase = {testServer: null}
 
@@ -25,7 +26,7 @@ describe("query test", () => {
 
     test('returns all books with necessary returns', async () => {
       const response = await GlobalDataBase.testServer.executeOperation({
-        query: 'query { books { title reserved author reservedDate reservedBy { id } reservationHistory available expired { isExpired } } }',
+        query: constants.ALL_BOOKS,
       });
 
       expect(response.body.singleResult.data?.books).toHaveLength(7);
@@ -56,7 +57,7 @@ describe("query test", () => {
 
     test('returns books with provided title', async () => {
       const response = await GlobalDataBase.testServer.executeOperation({
-        query: 'query($title: String) { books(title: $title) { title } }',
+        query: constants.BOOKS_WITH_TITLE,
         variables: { title: 'react' },
       });
 

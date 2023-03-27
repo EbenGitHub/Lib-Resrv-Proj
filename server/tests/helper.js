@@ -3,6 +3,10 @@ const mongoose = require('mongoose')
 const uuid = require("uuid")
 const User = require('../models/user')
 const Book = require('../models/book')
+const { SubscriptionClient } = require('subscriptions-transport-ws')
+const ws = require('ws')
+const { execute } = require( 'apollo-link' )
+const { WebSocketLink } = require( 'apollo-link-ws' )
 
 const books = [
   {
@@ -41,63 +45,6 @@ const books = [
       author: "Nail Will",
   }
 ]
-
-const ME = `query { me { id username } }`
-
-const RESERVE_BOOK = `mutation($id: ID!) {
-    reserveBook(id: $id) {
-      id
-    title
-    reservedDate
-    reserved
-    reservationHistory
-    available
-    expired {
-      expiryDate
-      isExpired
-      timeFormate
-    }
-    reservedBy {
-      id
-    }
-    }
-  }
-`
-
-const RELEASE_BOOK = `mutation($id: ID!) {
-    releaseBook(id: $id) {
-      id
-    title
-    reservedDate
-    reserved
-    reservationHistory
-    available
-    expired {
-      expiryDate
-      isExpired
-      timeFormate
-    }
-    reservedBy {
-      id
-    }
-    }
-  }
-`
-
-const CREATE_USER = `
-mutation($email: String!, $username: String!, $password: String!, $profession: String!) {
-    createUser(username: $username, password: $password, profession: $profession, email: $email) {
-      username
-    }
-  }
-`
-
-const LOG_IN = `mutation($username: String!, $password: String!) {
-    login(username: $username, password: $password) {
-      value
-      id
-    }
-  }`
 
 const startDB = async () => {
     mongoose.set('strictQuery', false)
@@ -166,16 +113,35 @@ const releaseForUser = async ({bookId, userId}) => {
     await Promise.all([ book.save(), user.save()])
 }
 
+function sleep( ms ) {
+  return new Promise( ( resolve ) => {
+    setTimeout( resolve, ms )
+  } )
+}
+
+const getWsClient = ( wsurl, authToken ) => {
+  const client = new SubscriptionClient( wsurl, {
+    reconnect: true,
+    connectionParams: {
+      headers: { Authorization: authToken },
+    }
+  }, ws )
+  return client
+ }
+
+ const createSubscriptionObservable = ( wsurl, authToken, query, variables ) => {
+  const link = new WebSocketLink( getWsClient( wsurl, authToken ) )
+  return execute( link, { query: query, variables: variables } )
+ }
+
 const helper = {
-      RESERVE_BOOK, 
-      RELEASE_BOOK, 
-      CREATE_USER,
-      ME, 
-      LOG_IN, 
       startDB, 
       reserveForUser,
       releaseForUser,
-      resetDB
+      resetDB,
+      sleep,
+      getWsClient,
+      createSubscriptionObservable
     }
 
 module.exports = helper

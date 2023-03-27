@@ -6,14 +6,15 @@ const User = require('../models/user')
 const Book = require('../models/book')
 const bcrypt = require('bcrypt')
 const helper = require('./helper')
-const constants = require('./constants')
 
 let GlobalDataBase = {testServer: null, token: null, bookId: null, user: null}
 
 jest.setTimeout(20 * 1000)
 
 describe("mutation test", () => {
-    beforeAll(async () => {
+    beforeAll(async function () {
+
+      this.timeout( 10000 ) 
 
       await helper.startDB()
 
@@ -40,15 +41,20 @@ describe("mutation test", () => {
         typeDefs,
         resolvers,
       });
+
+      const childProcess = require( 'child_process' )
+      serverProcess = childProcess.spawn(/^win/.test(process.platform) ? 'npm.cmd' : 'npm', ["run", "dev:test-loc"], { cwd: `${appRoot}` })
+      await helper.sleep(5000)
     })
 
     afterAll(async () => {
       await mongoose.connection.close()
+      await serverProcess.kill( )
     })
 
     test('user can be created', async () => {
       const response = await GlobalDataBase.testServer.executeOperation({
-        query: constants.CREATE_USER,
+        query: helper.CREATE_USER,
         variables: {
             email: 'test.gql@jest.com',
             username: 'love test',
@@ -62,7 +68,7 @@ describe("mutation test", () => {
 
     test('user can log in', async () => {
       const response = await GlobalDataBase.testServer.executeOperation({
-        query: constants.LOG_IN,
+        query: helper.LOG_IN,
           variables: {
             username: 'love test',
             password: 'jestfortest1234',
@@ -76,7 +82,7 @@ describe("mutation test", () => {
     describe("reserving a book", () => {
       test('authenticated user can reserve a book', async () => {
         const response = await GlobalDataBase.testServer.executeOperation({
-          query: constants.RESERVE_BOOK,
+          query: helper.RESERVE_BOOK,
           variables: {
             id: GlobalDataBase.bookId
           }
@@ -96,7 +102,7 @@ describe("mutation test", () => {
 
       test('unauthenticated user can not reserve a book', async () => {
         const response = await GlobalDataBase.testServer.executeOperation({
-          query: constants.RESERVE_BOOK,
+          query: helper.RESERVE_BOOK,
           variables: {
             id: GlobalDataBase.bookId
           }
@@ -118,7 +124,7 @@ describe("mutation test", () => {
 
       test('authenticated user can release a book', async () => {
         const response = await GlobalDataBase.testServer.executeOperation({
-          query: constants.RELEASE_BOOK,
+          query: helper.RELEASE_BOOK,
           variables: {
             id: GlobalDataBase.bookId
           }
@@ -135,7 +141,7 @@ describe("mutation test", () => {
   
       test('unauthenticated user can not release a book', async () => {
         const response = await GlobalDataBase.testServer.executeOperation({
-          query: constants.RELEASE_BOOK,
+          query: helper.RELEASE_BOOK,
           variables: {
             id: GlobalDataBase.bookId
           }
@@ -150,7 +156,7 @@ describe("mutation test", () => {
   
       test('one user can not release a book reserved by other user', async () => {
         const response = await GlobalDataBase.testServer.executeOperation({
-          query: constants.RELEASE_BOOK,
+          query: helper.RELEASE_BOOK,
           variables: {
             id: GlobalDataBase.bookId
           }
@@ -166,7 +172,7 @@ describe("mutation test", () => {
     describe("ME query", () => {
       test('me request for unauthenticated user is null', async () => {
         const response = await GlobalDataBase.testServer.executeOperation({
-          query: constants.ME,
+          query: helper.ME,
           variables: {
             id: GlobalDataBase.bookId
           }
@@ -180,7 +186,7 @@ describe("mutation test", () => {
   
       test('me request for authenticated user is not null', async () => {
         const response = await GlobalDataBase.testServer.executeOperation({
-          query: constants.ME,
+          query: helper.ME,
           variables: {
             id: GlobalDataBase.bookId
           }
