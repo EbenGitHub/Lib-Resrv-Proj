@@ -1,3 +1,4 @@
+const { gql } = require('apollo-server');
 
 const ME = `query { me { id username } }`
 
@@ -79,6 +80,40 @@ const BOOKS_WITH_TITLE = `query($title: String) {
     } 
 }`
 
+const RESERVE_BOOK_SUB = gql`
+subscription {
+    bookReserved {
+      id
+      reservedDate
+      author
+      reserved
+      available
+      title
+      reservedBy {
+        username
+        id
+      }
+    }
+  }
+`
+
+const RELEASE_BOOK_SUB = gql`
+subscription {
+    bookReleased {
+    id
+    reservedDate
+    author
+    reserved
+    available
+    title
+    reservedBy {
+        username
+        id
+    }
+    }
+}
+`
+
   
 const constants = {
     RESERVE_BOOK, 
@@ -87,7 +122,9 @@ const constants = {
     ME, 
     LOG_IN,
     ALL_BOOKS,
-    BOOKS_WITH_TITLE
+    BOOKS_WITH_TITLE,
+    RELEASE_BOOK_SUB,
+    RESERVE_BOOK_SUB
   }
 
 module.exports = constants

@@ -134,7 +134,19 @@ const getWsClient = ( wsurl, authToken ) => {
   return execute( link, { query: query, variables: variables } )
  }
 
+ const getBookId = async () => {
+  const books = await Book.find({})
+  return books[0]._id.toString()
+ }
+
+ const getUserId = async () => {
+  const users = await User.find({})
+  return users[0]._id.toString()
+ }
+
 const helper = {
+      getBookId,
+      getUserId,
       startDB, 
       reserveForUser,
       releaseForUser,
